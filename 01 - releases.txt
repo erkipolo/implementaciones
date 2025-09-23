@@ -1,0 +1,21 @@
+https://www.php.net/manual/es/features.safemode.functions.php
+
+Ubuntu 22.04.1 LTS (Jammy Jellyfish) ›
+Ubuntu 20.04.5 LTS (Focal Fossa) ›
+Ubuntu 18.04.6 LTS (Bionic Beaver) ›
+Ubuntu 16.04.7 LTS (Xenial Xerus) ›
+Ubuntu 14.04.6 LTS (Trusty Tahr) ›
+
+Debian 11 ("bullseye") — publicación "estable" actual
+Debian 10 ("buster") — publicación "estable antigua" actual
+Debian 9 ("stretch") — versión estable más antigua antigua, bajo soporte a largo plazo («LTS»).
+Debian 8 ("jessie") — versión archivada, bajo soporte «LTS» extendido.
+Debian 7 ("wheezy") — versión estable obsoleta.
+Debian 6.0 ("squeeze") — versión estable obsoleta.
+Debian GNU/Linux 5.0 ("lenny") — versión estable obsoleta.
+Debian GNU/Linux 4.0 ("etch") — versión estable obsoleta.
+Debian GNU/Linux 3.1 ("sarge") — versión estable obsoleta.
+Debian GNU/Linux 3.0 ("woody") — versión estable obsoleta.
+Debian GNU/Linux 2.2 ("potato") — versión estable obsoleta.
+Debian GNU/Linux 2.1 ("slink") — versión estable obsoleta.
+Debian GNU/Linux 2.0 ("hamm") — versión estable obsoleta. 
