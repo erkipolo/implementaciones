@@ -1,0 +1,57 @@
+---------------------------------------------
+---------------------------------------------
+  CONFIGURAR ACCESO POR SSH A:
+    UN USUARIO NOT ROOT
+    ANSIBLE WITHOUT PASSWORD
+---------------------------------------------
+ssh -l root -p 22 172.30.0.21
+
+adduser ppcojo
+
+adduser ansible
+
+apt -yq install sudo
+
+gpasswd -a ppcojo sudo
+
+gpasswd -a ansible sudo
+
+tee /etc/sudoers.d/ansible <<EOF
+ansible ALL=(ALL) NOPASSWD: ALL
+EOF
+
+logout
+
+ssh-keygen -t ed25519 -b 4096 -C "ppcojo"
+
+ssh-copy-id -i ppcojo_key.pub ppcojo@172.30.0.21
+
+ssh -i ppcojo_key -l ppcojo -p 22 172.30.0.21
+
+logout
+
+ssh-keygen -t ed25519 -b 4096 -C "ansible"
+
+ssh-copy-id -i ansible_key.pub ansible@172.30.0.21
+
+ssh -i ansible_key -l ansible -p 22 172.30.0.21
+
+tee /etc/ssh/sshd_config.d/local.conf <<EOF
+Port 22
+MaxAuthTries 1
+PasswordAuthentication no
+PermitRootLogin no
+MaxSessions 2
+PubkeyAuthentication yes
+AuthorizedKeysFile      .ssh/authorized_keys .ssh/authorized_keys2
+PermitEmptyPasswords no
+ChallengeResponseAuthentication no
+EOF
+
+systemctl restart ssh
+
+passwd -l root
+
+logout
+---------------------------------------------
+---------------------------------------------
