@@ -1,0 +1,21 @@
+---
+
+- name: Common Tasks
+  tags: common
+  hosts: all
+  become: yes
+  become_method: sudo
+  roles:
+    - common
+
+- name: SendOnly
+  tags: sendonly
+  hosts: all
+  become: yes
+  become_method: sudo
+  vars:
+    MAIL_NAME: 'vps'
+    MAIL_DOMAIN: 'homelab.cu'
+  roles:
+    - sendonly-postfix
+

@@ -4,6 +4,8 @@
     UN USUARIO NOT ROOT
     ANSIBLE WITHOUT PASSWORD
 ---------------------------------------------
+ssh-keygen -f "/home/erki/.ssh/known_hosts" -R "172.30.0.21"
+
 ssh -l root -p 22 172.30.0.21
 
 adduser ppcojo

@@ -1,0 +1,13 @@
+- name: restart_postfix
+  ansible.builtin.systemd_service:
+    name: postfix
+    masked: no
+    enabled: true
+    state: restarted
+
+- name: restart_dovecot
+  ansible.builtin.systemd_service:
+    name: dovecot
+    masked: no
+    enabled: true
+    state: restarted

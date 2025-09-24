@@ -1,0 +1,17 @@
+/var/log/mail.log {
+  daily
+  dateext
+  dateformat -%Y%m%d-%H%M%S
+  missingok
+  rotate 365
+  compress
+  su root root
+  create 640 root root
+  postrotate
+    if [ -d /run/systemd/system ] && command systemctl >/dev/null 2>&1 && systemctl is-active --quiet postlogd.service; then
+      systemctl kill --kill-who main --signal=SIGHUP postlogd.service
+    else
+      invoke-rc.d postfix reload > /dev/null
+    fi
+  endscript
+}

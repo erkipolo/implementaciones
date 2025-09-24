@@ -6,10 +6,12 @@ pveam update
 
 pvesm status
 
-pveam download HDD_Local debian-13-standard_13.1-1_amd64.tar.zst
+pveam available --section system | grep debian
+
+pveam download mitrans-cephfs debian-13-standard_13.1-1_amd64.tar.zst
 
 pct create 700 \
-HDD_Local:vztmpl/debian-13-standard_13.1-1_amd64.tar.zst \
+mitrans-cephfs:vztmpl/debian-13-standard_13.1-1_amd64.tar.zst \
 --cores 1 \
 --hostname docker01 \
 --searchdomain mitrans.gob.cu \
@@ -18,15 +20,17 @@ HDD_Local:vztmpl/debian-13-standard_13.1-1_amd64.tar.zst \
 --swap 512 \
 --net0 name=eth0,ip=172.30.0.21/26,bridge=vmbr0,firewall=1,gw=172.30.0.5 \
 --onboot 1 \
---rootfs mitrans-zfs:20 \
+--rootfs mitrans-ceph:20 \
 --unprivileged 1 \
 --features nesting=1
 
+pct config 700
+
 pct start 700
 
-pct enter 700
+pct status 700
 
-lsb_release -a
+pct enter 700
 
 cat /etc/debian_version
 
@@ -56,6 +60,8 @@ Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 EOF
 
 apt update
+
+apt list --upgradable
 
 apt -yq dist-upgrade
 

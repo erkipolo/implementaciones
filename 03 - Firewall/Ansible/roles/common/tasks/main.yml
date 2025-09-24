@@ -1,0 +1,7 @@
+- name: update repository index
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: upgrade the system
+  ansible.builtin.apt:
+    upgrade: yes

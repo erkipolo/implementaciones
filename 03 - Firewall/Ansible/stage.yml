@@ -1,0 +1,18 @@
+---
+
+- name: Common Tasks
+  tags: common
+  hosts: all
+  become: yes
+  become_method: sudo
+  roles:
+    - common
+
+- name: Firewal via UFW
+  tags: ufw
+  hosts: all
+  become: yes
+  become_method: sudo
+  roles:
+    - ufw
+
