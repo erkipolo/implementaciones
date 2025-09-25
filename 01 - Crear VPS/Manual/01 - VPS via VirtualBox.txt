@@ -59,6 +59,10 @@ Note: login with root
 
 cat /etc/debian_version
 
+cat /etc/os-release
+
+lsb_release -a
+
 update-alternatives --config editor
 
 dpkg-reconfigure locales
