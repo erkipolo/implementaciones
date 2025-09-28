@@ -11,3 +11,6 @@
   ansible.builtin.ufw:
     state: enabled
     policy: deny
+- name: Habilitar el log
+  ansible.builtin.ufw:
+    logging: on
