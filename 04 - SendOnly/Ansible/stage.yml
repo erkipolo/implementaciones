@@ -1,21 +1,22 @@
 ---
 
-- name: Common Tasks
+- name: Actualizacion del sistema
   tags: common
   hosts: all
-  become: yes
-  become_method: sudo
   roles:
     - common
+
+- name: Cortafuegos UFW
+  tags: ufw
+  hosts: all
+  roles:
+    - ufw
 
 - name: SendOnly
   tags: sendonly
   hosts: all
-  become: yes
-  become_method: sudo
   vars:
     MAIL_NAME: 'vps'
     MAIL_DOMAIN: 'homelab.cu'
   roles:
     - sendonly-postfix
-

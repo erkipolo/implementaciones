@@ -11,7 +11,7 @@ ufw default deny routed
 ufw default allow outgoing
 
 # Permitir el acceso al SSH (hazlo antes de habilitarlo)
-ufw limit in from 0.0.0.0/0 to any app OpenSSH comment 'Allow SSH'
+ufw limit in from 0.0.0.0/0 to any app 'OpenSSH' comment 'Allow SSH'
 
 # Habilitando el cortafuegos
 ufw enable

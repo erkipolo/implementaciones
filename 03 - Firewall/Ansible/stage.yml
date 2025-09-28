@@ -1,18 +1,13 @@
 ---
 
-- name: Common Tasks
+- name: Actualizacion del sistema
   tags: common
   hosts: all
-  become: yes
-  become_method: sudo
   roles:
     - common
 
-- name: Firewal via UFW
+- name: Cortafuegos UFW
   tags: ufw
   hosts: all
-  become: yes
-  become_method: sudo
   roles:
     - ufw
-

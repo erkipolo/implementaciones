@@ -118,3 +118,9 @@
     line: 'smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt'
   notify: restart_postfix
 
+- name: Install mailutils
+  ansible.builtin.apt:
+    name:
+      - mailutils
+    state: present
+
