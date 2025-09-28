@@ -1,10 +1,10 @@
 ---
 
 - name: Actualizacion del sistema
-  tags: common
+  tags: upgrade
   hosts: all
   roles:
-    - common
+    - upgrade
 
 - name: Cortafuegos UFW
   tags: ufw
@@ -12,8 +12,8 @@
   roles:
     - ufw
 
-- name: SendOnly
-  tags: sendonly
+- name: SendOnly via postfix
+  tags: sendonly-postfix
   hosts: all
   vars:
     MAIL_NAME: 'vps'

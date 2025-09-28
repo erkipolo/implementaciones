@@ -1,4 +1,4 @@
-vps:
+all:
   hosts:
-    192.168.56.10
-
+    vps:
+      ansible_host: 192.168.56.10
