@@ -1,3 +1,9 @@
+- name: Instalamos los certificados de ejemplo
+  ansible.builtin.apt:
+    name:
+      - ssl-cert
+    state: present
+
 - name: Instalar postfix
   ansible.builtin.apt:
     name:
