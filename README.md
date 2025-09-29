@@ -1,12 +1,4 @@
 # implementaciones
 Implementaciones Realizadas
-  Manual
-  Ansible
-    # To manage UFW
-    ansible-galaxy collection install community.general
-    # verificamos las sintaxis
-    ansible-playbook --syntax-check stage.yml
-    # probamos el escenario con las tareas del rol "homelab"
-    ansible-playbook stage.yml
-    # How to exec a tags
-    ansible-playbook --tags "common" stage.yml
+- Manual (Instalación manual de un servidor)
+- Ansible (Automatización de "Manual")
