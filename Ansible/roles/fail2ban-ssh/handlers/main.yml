@@ -1,6 +1,6 @@
-- name: restart_postfix
+- name: restart_fail2ban
   ansible.builtin.systemd_service:
-    name: postfix
+    name: fail2ban
     masked: no
     enabled: true
     state: restarted

@@ -1,0 +1,38 @@
+---------------------------------------------
+---------------------------------------------
+  CONFIGURAR SEGURIDAD PARA AUTH POR SSH
+---------------------------------------------
+apt -yq install fail2ban
+
+cp /etc/fail2ban/jail.{conf,local}
+
+editor /etc/fail2ban/jail.local
+ignoreip = 127.0.0.1/8 ::1 172.30.0.29
+bantime  = 10h
+findtime  = 10m
+maxretry = 3
+destemail = erkipolo@gmail.com
+mta=mail
+action = %(action_mwl)s
+
+systemctl restart fail2ban
+
+cat /etc/fail2ban/jail.d/defaults-debian.conf
+  [DEFAULT]
+  banaction = nftables
+  banaction_allports = nftables[type=allports]
+
+  [sshd]
+  backend = systemd
+  journalmatch = _SYSTEMD_UNIT=ssh.service + _COMM=sshd
+  enabled = true
+
+fail2ban-client status sshd
+
+tail /var/log/fail2ban.log
+
+fail2ban-client unban 172.30.0.29
+
+*fail2ban-client set sshd unbanip x.x.x.x
+---------------------------------------------
+---------------------------------------------
