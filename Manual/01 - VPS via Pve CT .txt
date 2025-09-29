@@ -1,0 +1,93 @@
+---------------------------------------------
+---------------------------------------------
+  CREANDO EL SERVIDOR (CT like VPS)
+---------------------------------------------
+pveam update
+
+pvesm status
+
+pveam available --section system | grep debian
+
+pveam download mitrans-cephfs debian-13-standard_13.1-1_amd64.tar.zst
+
+pct create 700 \
+mitrans-cephfs:vztmpl/debian-13-standard_13.1-1_amd64.tar.zst \
+--cores 1 \
+--hostname docker01 \
+--searchdomain mitrans.gob.cu \
+--nameserver 172.30.0.11 \
+--memory 512 \
+--swap 512 \
+--net0 name=eth0,ip=172.30.0.21/26,bridge=vmbr0,firewall=1,gw=172.30.0.5 \
+--onboot 1 \
+--rootfs mitrans-ceph:20 \
+--unprivileged 1 \
+--features nesting=1
+
+pct config 700
+
+pct start 700
+
+pct status 700
+
+pct enter 700
+
+cat /etc/debian_version
+
+cat /etc/os-release
+
+lsb_release -a
+
+update-alternatives --config editor
+
+dpkg-reconfigure locales
+  Locales to be generated:
+    [*] es_ES.UTF-8 UTF-8
+  Default locale for the system environment:
+    es_ES.UTF-8
+
+dpkg-reconfigure tzdata
+  America/Habana
+
+tee /etc/apt/sources.list.d/debian.sources <<EOF
+Types: deb
+URIs: http://security.debian.org
+Suites: trixie-security
+Components: contrib main
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+
+Types: deb
+URIs: http://deb.debian.org/debian
+Suites: trixie trixie-updates
+Components: contrib main
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+EOF
+
+apt update
+
+apt list --upgradable
+
+apt -yq dist-upgrade
+
+hostname -s
+  docker01
+
+hostname -d
+  mitrans.gob.cu
+
+hostname -f
+  docker01.mitrans.gob.cu
+
+apt -yq --purge autoremove postfix
+
+passwd root
+
+tee /etc/ssh/sshd_config.d/local.conf <<EOF
+PermitRootLogin yes
+EOF
+
+systemctl restart ssh
+
+exit
+---------------------------------------------
+---------------------------------------------

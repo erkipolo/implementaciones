@@ -1,0 +1,25 @@
+- name: Instalando rsyslog
+  apt:
+    name: rsyslog
+    state: latest
+- name: Habilitando rsyslog
+  systemd:
+    name: rsyslog
+    state: started
+    enabled: yes
+- name: Instalando ufw
+  ansible.builtin.apt:
+    name: ufw
+    state: latest
+- name: abrir el firewall para 22
+  ansible.builtin.ufw:
+    rule: limit
+    port: "22"
+    proto: tcp
+- name: Habilitar ufw
+  ansible.builtin.ufw:
+    state: enabled
+    policy: deny
+- name: Habilitar el log
+  ansible.builtin.ufw:
+    logging: medium

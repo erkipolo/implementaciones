@@ -1,0 +1,115 @@
+Graphical Install
+  Select a anguage:
+    Spanish - Español
+  Seleccione su ubicación
+    Cuba
+  Configur el teclado
+    Inglés estadounidense
+  Configurar la Red
+    Interfaz de red primaria:
+      enp0s8
+    Método de configuración de red:
+      Configurar la red manualmente
+    Dirección IP:
+      192.168.56.10/24
+    Pasarela:
+      (none)
+    Direcciones de servidores de nombres:
+      (none)
+    Nombre de la máquina:
+      vps
+    Nombre de dominio:
+      homelab.cu
+  Configurar usuarios y contraseñas
+    Clave del superusuario:
+      SomeSecretPassword
+    Nombre completo para el nuevo usuarios
+      (none)
+    Nombre de usuario para la cuenta
+      usertemporal
+    Clave del nuevo usuario:
+      SomeSecretPassword
+  Particionado de discos
+    Metodo de particionado
+      Guiado - utilizar el disco completo y configurar LVM
+    Elija disco a particionar
+      (Default)
+    Esquema del particionado
+      Todos los ficheros en una partición (reomendado para novatos)
+    Desea guardar los cambios a los discos y configurar LVM
+      Sí
+    Cantidad en el grupo de volumen a usar en el particionado guiado
+      max
+    Desea escribir los cambios en los discos
+      Sí
+  Configurar el gestor de paquetes
+    Desea analisar medios de instalacion adicionales
+      No
+    Desea utilizar una réplica de red
+      No
+  Configuracion de popularity-contest
+    No
+  Seleccion de programas
+    SSH server
+    Uilidades estandar del sistema
+  Terminar la Instalación
+
+
+Note: login with root
+
+cat /etc/debian_version
+
+cat /etc/os-release
+
+lsb_release -a
+
+update-alternatives --config editor
+
+dpkg-reconfigure locales
+  Locales to be generated:
+    [*] es_ES.UTF-8 UTF-8
+  Default locale for the system environment:
+    es_ES.UTF-8
+
+dpkg-reconfigure tzdata
+  America/Habana
+
+tee /etc/apt/sources.list.d/debian.sources <<EOF
+Types: deb
+URIs: http://security.debian.org
+Suites: trixie-security
+Components: contrib main
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+
+Types: deb
+URIs: http://deb.debian.org/debian
+Suites: trixie trixie-updates
+Components: contrib main
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+EOF
+
+apt update
+
+apt list --upgradable
+
+apt -yq dist-upgrade
+
+hostname -s
+  docker01
+
+hostname -d
+  mitrans.gob.cu
+
+hostname -f
+  docker01.mitrans.gob.cu
+
+passwd root
+
+tee /etc/ssh/sshd_config.d/local.conf <<EOF
+PermitRootLogin yes
+EOF
+
+systemctl restart ssh
+
+exit
+

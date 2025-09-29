@@ -1,0 +1,173 @@
+---------------------------------------------
+---------------------------------------------
+  CONFIGURAR ACTUALIZACIONES AUTOMATICAS
+---------------------------------------------
+apt -yq install unattended-upgrades
+
+tee /etc/apt/apt.conf.d/52unattended-upgrades-local <<EOF
+Unattended-Upgrade::Origins-Pattern {
+  "origin=Debian,codename=${distro_codename}-updates";
+  "origin=Debian,codename=${distro_codename},label=Debian";
+  "origin=Debian,codename=${distro_codename},label=Debian-Security";
+  "origin=Debian,codename=${distro_codename}-security,label=Debian-Security";
+};
+Unattended-Upgrade::Package-Blacklist {
+};
+Unattended-Upgrade::Mail "erkipolo@gmail.com";
+Unattended-Upgrade::MailReport "on-change";
+EOF
+
+tee /etc/apt/apt.conf.d/20auto-upgrades <<EOF
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "1";
+APT::Periodic::AutocleanInterval "7";
+APT::Periodic::Download-Upgradeable-Packages "1";
+EOF
+
+systemctl restart unattended-upgrades
+
+unattended-upgrade -d
+---------------------------------------------
+---------------------------------------------
+
+
+---------------------------------------------
+---------------------------------------------
+  CONFIGURAR ROTACION DE BITACORAS DE LAS
+          ACTUALIZACIONES AUTOMATICAS
+---------------------------------------------
+tee /etc/logrotate.d/unattended-upgrades <<EOF
+/var/log/unattended-upgrades/unattended-upgrades.log 
+/var/log/unattended-upgrades/unattended-upgrades-dpkg.log
+/var/log/unattended-upgrades/unattended-upgrades-shutdown.log
+{
+  daily
+  dateext
+  dateformat -%Y%m%d-%H%M%S
+  missingok
+  rotate 365
+  compress
+}
+EOF
+
+logrotate -vf /etc/logrotate.d/unattended-upgrades
+
+ls -lh /var/log/unattended-upgrades/
+---------------------------------------------
+---------------------------------------------
+
+
+---------------------------------------------
+---------------------------------------------
+  CONFIGURAR EL MONITOREO DE LOS RECURSOS
+---------------------------------------------
+apt -y install monit
+
+editor /etc/monit/conf.d/local
+set daemon 300
+set mailserver localhost
+set alert erkipolo@gmail.com
+set logfile /var/log/monit.log
+check system $HOST
+  if loadavg (1min) per core > 2 for 5 cycles then alert
+  if loadavg (5min) per core > 1.5 for 10 cycles then alert
+  if cpu usage > 95% for 10 cycles then alert
+  if memory usage > 75% then alert
+  if swap usage > 25% then alert
+check filesystem root with path /
+  if space usage > 70% then alert
+
+chmod 0700 /etc/monit/conf.d/local
+
+monit -t
+
+monit -c /etc/monit/conf.d/local
+
+systemctl restart monit
+
+systemctl status monit
+
+monit -v
+
+monit reload
+---------------------------------------------
+---------------------------------------------
+
+
+---------------------------------------------
+---------------------------------------------
+  CONFIGURAR CHEQUEO DE INTEGRIDAD (vps only)
+---------------------------------------------
+apt -yq install aide
+
+editor /etc/aide/aide.conf.d/70_aide_lxcfs
+!/dev/
+!/run/
+!/home/
+!/root/
+!/etc/apt/
+!/var/cache/
+!/var/log/
+!/var/lib/
+!/var/spool/
+
+editor /usr/local/bin/notify-if-AIDE-change.sh
+#!/bin/bash
+nice -19 /usr/bin/aide -c /etc/aide/aide.conf --check | tee /var/log/aide/reports.log > /dev/null
+COUNT=$(cat /var/log/aide/reports.log | egrep '(Added|Removed|Changed).*[0-9]' | awk '{SUM+=$NF}; END {print SUM}')
+if [ $COUNT -gt 0 ]; then
+        # changes detected
+        cat /var/log/aide/reports.log | mail -s "AIDE alert for $FQDN" erkipolo@gmail.com
+fi
+
+chmod +x /usr/local/bin/notify-if-AIDE-change.sh
+
+crontab -e
+*/15 * * * * /usr/local/bin/notify-if-AIDE-change.sh >/dev/null 2>&1
+
+aideinit
+
+Note: for each change we make
+
+  aide -c /etc/aide/aide.conf --init
+
+  aide -c /etc/aide/aide.conf --update
+
+  cp /var/lib/aide/aide.db.new /var/lib/aide/aide.db
+
+aide -c /etc/aide/aide.conf --check
+
+tail -f /var/mail/root
+
+tail -f /var/log/aide/aide.log
+
+aide -c /etc/aide/aide.conf --check | mail erkipolo@gmail.com
+---------------------------------------------
+---------------------------------------------
+
+          VOY POR AQUI
+
+---------------------------------------------
+---------------------------------------------
+    Creamos una salva del contenedor
+---------------------------------------------
+vzdump 700 \
+--compress zstd \
+--mode suspend \
+--remove 0 \
+--notes-template '{{guestname}}' \
+--storage HDD_Local
+---------------------------------------------
+---------------------------------------------
+
+
+---------------------------------------------
+---------------------------------------------
+    Restauramos la salva del contenedor
+---------------------------------------------
+pct restore 700 \
+/mnt/pve/HDD_Local/dump/vzdump-lxc-700-2025_09_21-18_08_08.tar.zst \
+--storage mitrans-zfs \
+--force
+---------------------------------------------
+---------------------------------------------

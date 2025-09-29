@@ -1,0 +1,34 @@
+---
+
+- name: Actualizacion del sistema
+  tags: upgrade
+  hosts: all
+  roles:
+    - upgrade
+
+- name: Cortafuegos UFW
+  tags: ufw
+  hosts: all
+  roles:
+    - ufw
+
+- name: Habilitar Notificaciones via postfix
+  tags: sendonly-postfix
+  hosts: all
+  vars:
+    MAIL_NAME: 'vps'
+    MAIL_DOMAIN: 'homelab.cu'
+  roles:
+    - sendonly-postfix
+
+- name: Habilitar Notificaciones de Acceso via SSH
+  tags: notify-ssh
+  hosts: all
+  roles:
+    - notify-ssh
+
+- name: HIPS for SSH
+  tags: fail2ban-ssh
+  hosts: all
+  roles:
+    - fail2ban-ssh
