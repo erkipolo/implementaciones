@@ -1,0 +1,42 @@
+- name: Instalar las librerias de autenticacion de postfix
+  ansible.builtin.apt:
+    name:
+      - libsasl2-modules
+    state: present
+
+- name: Configurar el servidor de correo de envio
+  ansible.builtin.lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^relayhost ="
+    line: 'relayhost = [{{FQDN_EMAIL_SERVER}}]:587'
+  notify: restart_postfix
+
+- name: Habilitar la autenticacion como cliente en postfix
+  ansible.builtin.lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^smtp_sasl_auth_enable ="
+    line: 'smtp_sasl_auth_enable = yes'
+  notify: restart_postfix
+
+- name: Desabilitar la autenticacion como cliente anonimo en postfix
+  ansible.builtin.lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^smtp_sasl_security_options ="
+    line: 'smtp_sasl_security_options = noanonymous'
+  notify: restart_postfix
+
+- name: Copiar la base de datos de la configuracion para gmail
+  ansible.builtin.copy:
+    src: "sasl_passwd.db"
+    dest: /etc/postfix/sasl/sasl_passwd.db
+    owner: root
+    group: root
+    mode: '0600'
+  notify: restart_postfix
+
+- name: Configurar el usuario y la contraseña del servidor de correo de envio
+  ansible.builtin.lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^smtp_sasl_password_maps ="
+    line: 'smtp_sasl_password_maps = hash:/etc/postfix/sasl/sasl_passwd'
+  notify: restart_postfix

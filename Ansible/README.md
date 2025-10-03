@@ -1,43 +1,58 @@
-# 1 - Cómo usar las variables del escenario:
-## 1.0 - Modifique y adapte las variables del escenario (ejemplo):
-`MAIL_NAME: 'vps'`
-
-`MAIL_DOMAIN: 'homelab.cu'`
-
-### Nota: Para crear una contraseña aleatoria, sugerimos el uso de:
-`pwgen -s 80 -1 -v -c -0`
-
-## 1.1 - Modifique y adapte el inventario de equipos a gestionar
-
-# 2 - Cómo usar el código:
-
-## 2.0 - Instalamos "Ansible"
+# Ansible:
+## 1- Instalamos "Ansible"
 `apt -yq install ansible sshpass`
 
-## 2.1 - Verificamos la versión de "Ansible"
+## 2- Verificamos la versión de "Ansible"
 `ansible --version`
 
-## 2.2 - Verificamos las sintaxis del escenario
-`ansible-playbook --syntax-check stage.yml`
+## 3- Chequear el acceso a todo el inventario
+`ansible all -m ping`
 
-## 2.3 - Ejecutamos el escenario
-`ansible-playbook stage.yml`
+## 4- Verificamos las sintaxis del escenario
+`ansible-playbook --syntax-check ../stage.yml`
 
-## 2.4 - Ejecutamos algunas tareas del escenario
-`ansible-playbook --tags "upgrade" stage.yml`
+## 5 - Ejecutamos el escenario
+`ansible-playbook ../stage.yml`
 
-# 3 - Tareas incluidas en el escenario:
-## 3.1  - Actualizacion del sistema
-### Nombre: upgrade
-### Descripción:
-### Actualiza los índices del repositorio configurado y actualiza el sistema operativo
-## 3.2  - Install additional packages
-## 3.3  - Create new sudo user
-## 3.4  - Set up SSH authentication for new user
-## 3.5  - Set timezone
-## 3.6  - Enable fail2ban
-## 3.7  - Change server hostname
-## 3.8  - Add a swap file
-## 3.9  - Configure unattended-upgrades
-## 3.10 - Enable UFW and allow some ports
+## 6 - Ejecutamos algunas tareas del escenario
+`ansible-playbook --tags "upgrade" ../stage.yml`
+
+# Escenarios:
+## 1- Roles de la Configuración Inicial de Debian
+### 1.1- Actualizar los índices del repositorio y el sistema operativo
+### 1.2- Crear un nuevo usuario con privilegios de sudo y acceso SSH por llave
+#### Instalar paquete requerido
+`apt install whois`
+#### Generar la contraseña del nuevo usuario
+`mkpasswd --method=sha-512`
+#### Modifique las variables correspondientes en la configuración del escenario
+`NORMAL_USER_NAME: 'sysadmin'`
+
+`NORMAL_USER_PASS: '$6$1/g/rmFXEQeo.rBm$H5ab4JI3K5NbYyqp8PF9u9NipArTvygwbCqBrBvyU3fdxLo7K.dxHJSyowdawqmB.F.aPY28zYt0Q6RsZOCHM0'`
+
+`NORMAL_USER_PUB_KEY: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILb4r5KUCCXyJthR8MUeTI9R2+9g6pBIDs45bkcVcn43 sysadmin'`
+### 1.3- Habilitar Cortafuegos (ufw)
+### 1.4- Habilitar Notificaciones via e-mail (postfix)
+### 1.5- Habilitar autenticación en el servidor de envio de e-mail (Requiere Habilitar Notificaciones via e-mail usando postfix [Opcional])
+#### Instalar paquete requerido
+`apt install postfix`
+#### Crear archivo de contraseñas
+`editor /etc/postfix/sasl/sasl_passwd`
+#### Con el contenido (ejemplo)
+`[smtp.gmail.com]:587 erkipolo@gmail.com:diiflrfqllahsgdt`
+#### Cree el archivo de base de datos ha copiar al servidor
+`postmap sasl_passwd`
+#### Copiar dentro de la carpeta "files" que se encuentra dentro del rol
+`cp -v sasl_passwd.db roles/sendonly-postfix-auth/files/`
+### 1.6- Habilitar Notificaciones de Acceso al servicio SSH (Requiere Habilitar Notificaciones via e-mail usando postfix)
+#### Modifique el usuario de e-mail que recibe la notificación dentro del guión
+### 1.7- Habilitar HIPS con notificaciones via e-mail usando fail2ban (Requiere Habilitar Notificaciones via e-mail usando postfix)
+#### Modifique el usuario de e-mail que recibe la notificación dentro de la configuración personalizada
+### 1.8- Habilitar las actualizaciones automáticas con notificaciones via e-mail (Requiere Habilitar Notificaciones via e-mail usando postfix)
+#### Modifique el usuario de e-mail que recibe la notificación dentro de la configuración personalizada
+
+
+
+
+## 2- Roles de la XXXXX
 ## 3.11 - Disable root login & password authentication, change SSH Port

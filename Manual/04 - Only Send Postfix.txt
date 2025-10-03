@@ -105,5 +105,9 @@ ls -lh /var/log/
 apt -yq install mailutils
 
 echo "This is the body" | mail -s "This is the subject" erkipolo@gmail.com
+
+mailq
+
+postsuper -r ALL && postqueue -f
 ---------------------------------------------
 ---------------------------------------------

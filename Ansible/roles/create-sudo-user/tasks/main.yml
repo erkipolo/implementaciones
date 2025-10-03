@@ -1,0 +1,26 @@
+- name: Crear un nuevo usuario
+  ansible.builtin.user:
+    name: "{{ NORMAL_USER_NAME }}"
+    password: "{{ NORMAL_USER_PASS }}"
+    state: present
+    createhome: yes
+    shell: /bin/bash
+
+- name: Agregar llave de autorización al nuevo usuario
+  ansible.builtin.authorized_key:
+    user: "{{ NORMAL_USER_NAME }}"
+    key: "{{ NORMAL_USER_PUB_KEY }}"
+    state: present
+
+- name: Instalar el comando sudo
+  ansible.builtin.apt:
+    name:
+      - sudo
+    state: present
+
+- name: Agregar el nuevo usuario al grupo sudo
+  ansible.builtin.lineinfile:
+    dest: /etc/sudoers
+    regexp: "{{ NORMAL_USER_NAME }} ALL"
+    line: "{{ NORMAL_USER_NAME}} ALL=(ALL) ALL"
+    state: present
