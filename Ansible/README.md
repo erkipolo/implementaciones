@@ -17,6 +17,9 @@
 ## 6 - Ejecutamos algunas tareas del escenario
 `ansible-playbook --tags "upgrade" ../stage.yml`
 
+## 7 - Ejecutamos el escenario en un solo servidor
+`ansible-playbook --limit vps --tags "upgrade" ../stage.yml`
+
 # Escenarios:
 ## 1- Roles de la Configuración Inicial de Debian
 ### 1.1- Actualizar los índices del repositorio y el sistema operativo
