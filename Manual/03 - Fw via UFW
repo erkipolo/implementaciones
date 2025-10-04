@@ -39,3 +39,29 @@ tail /var/log/ufw.log
 ---------------------------------------------
 ---------------------------------------------
 
+
+---------------------------------------------
+---------------------------------------------
+  CONFIGURAR ROTACION DE BITACORAS DE UFW
+---------------------------------------------
+tee /etc/logrotate.d/ufw <<EOF
+/var/log/ufw.log {
+  daily
+  dateext
+  dateformat -%Y%m%d-%H%M%S
+  missingok
+  rotate 365
+  compress
+  su root root
+  create 640 root adm
+  postrotate
+    [ -x /usr/lib/rsyslog/rsyslog-rotate ] && /usr/lib/rsyslog/rsyslog-rotate || true
+  endscript
+}
+EOF
+
+logrotate -vf /etc/logrotate.d/ufw
+
+ls -lh /var/log/ufw.log
+---------------------------------------------
+---------------------------------------------

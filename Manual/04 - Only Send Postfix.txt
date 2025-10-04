@@ -39,36 +39,6 @@ systemctl restart postfix
 
 ---------------------------------------------
 ---------------------------------------------
-  CONFIGURAR POSTFIX PARA USAR GMAIL
----------------------------------------------
-apt -yq install libsasl2-modules
-
-tee /etc/postfix/sasl/sasl_passwd <<EOF
-[smtp.gmail.com]:587 erkipolo@gmail.com:diiflrfqllmpdttk
-EOF
-
-postmap /etc/postfix/sasl/sasl_passwd
-
-chown root:root /etc/postfix/sasl/sasl_passwd
-
-chmod 0600 /etc/postfix/sasl/sasl_passwd
-
-postconf -e 'relayhost = [smtp.gmail.com]:587'
-postconf -e 'smtp_sasl_auth_enable = yes'
-postconf -e 'smtp_sasl_security_options = noanonymous'
-postconf -e 'smtp_sasl_password_maps = hash:/etc/postfix/sasl/sasl_passwd'
-postconf -e 'smtp_tls_security_level = encrypt'
-postconf -e 'smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt'
-
-postfix check
-
-systemctl restart postfix
----------------------------------------------
----------------------------------------------
-
-
----------------------------------------------
----------------------------------------------
   CONFIGURAR ROTACION DE BITACORAS DE POSTFIX
 ---------------------------------------------
 tee /etc/logrotate.d/postfix <<EOF
@@ -93,7 +63,7 @@ EOF
 
 logrotate -vf /etc/logrotate.d/postfix
 
-ls -lh /var/log/
+ls -lh /var/log/mail.log
 ---------------------------------------------
 ---------------------------------------------
 

@@ -29,3 +29,10 @@
   ansible.builtin.ufw:
     logging: medium
 
+- name: Configuramos la rotacion de las bitacoras de ufw
+  ansible.builtin.template:
+    src: ufw.j2
+    dest: /etc/logrotate.d/ufw
+    owner: root
+    group: root
+    mode: '0644'

@@ -1,4 +1,4 @@
-- name: Instalamos las actualizaciones automáticas
+- name: Instalamos las actualizaciones automaticas
   ansible.builtin.apt:
     name:
       - unattended-upgrades
@@ -26,4 +26,7 @@
   ansible.builtin.template:
     src: unattended-upgrades.j2
     dest: /etc/logrotate.d/unattended-upgrades
+    owner: root
+    group: root
+    mode: '0644'
   notify: restart_unattended

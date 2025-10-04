@@ -12,3 +12,11 @@
     group: root
     mode: '0644'
   notify: restart_fail2ban
+
+- name: Configuramos la rotacion de las bitacoras del HIPS
+  ansible.builtin.template:
+    src: fail2ban.j2
+    dest: /etc/logrotate.d/fail2ban
+    owner: root
+    group: root
+    mode: '0644'
