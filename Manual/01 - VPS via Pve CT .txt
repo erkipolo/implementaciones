@@ -8,14 +8,14 @@ pvesm status
 
 pveam available --section system | grep debian
 
-pveam download mitrans-cephfs debian-13-standard_13.1-1_amd64.tar.zst
+pveam download mitrans-cephfs debian-13-standard_13.1-2_amd64.tar.zst
 
 pct create 700 \
-mitrans-cephfs:vztmpl/debian-13-standard_13.1-1_amd64.tar.zst \
+mitrans-cephfs:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst \
 --cores 1 \
 --hostname docker01 \
 --searchdomain mitrans.gob.cu \
---nameserver 172.30.0.11 \
+--nameserver 172.30.0.11,8.8.8.8 \
 --memory 512 \
 --swap 512 \
 --net0 name=eth0,ip=172.30.0.21/26,bridge=vmbr0,firewall=1,gw=172.30.0.5 \
@@ -31,6 +31,12 @@ pct start 700
 pct status 700
 
 pct enter 700
+
+ip a
+
+ip r
+
+cat /etc/resolv.conf
 
 cat /etc/debian_version
 
