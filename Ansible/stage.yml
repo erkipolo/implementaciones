@@ -1,6 +1,6 @@
 ---
 
-- name: Actualizar los índices del repositorio y el sistema operativo
+- name: Actualizar los indices del repositorio y el sistema operativo
   tags: upgrade
   hosts: all
   roles:
@@ -28,7 +28,7 @@
   roles:
     - sendonly-postfix
 
-- name: Habilitar autenticación en el servidor de envio de e-mail (Requiere Habilitar Notificaciones via e-mail usando postfix [Opcional])
+- name: Habilitar autenticacion en el servidor de envio de e-mail (Requiere Habilitar Notificaciones via e-mail usando postfix [Opcional])
   tags: sendonly-postfix-auth
   hosts: all
   vars:
@@ -48,7 +48,7 @@
   roles:
     - fail2ban
 
-- name: Habilitar las actualizaciones automáticas con notificaciones via e-mail (Requiere Habilitar Notificaciones via e-mail usando postfix)
+- name: Habilitar las actualizaciones automaticas con notificaciones via e-mail (Requiere Habilitar Notificaciones via e-mail usando postfix)
   tags:  unattended-upgrades
   hosts: all
   roles:

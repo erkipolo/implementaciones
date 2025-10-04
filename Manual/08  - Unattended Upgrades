@@ -52,6 +52,6 @@ EOF
 
 logrotate -vf /etc/logrotate.d/unattended-upgrades
 
-ls -lh /var/log/unattended-upgrades/
+ls -lh /var/log/unattended-upgrades/unattended-upgrades.log
 ---------------------------------------------
 ---------------------------------------------

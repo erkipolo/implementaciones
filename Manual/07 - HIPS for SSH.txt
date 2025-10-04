@@ -36,3 +36,31 @@ fail2ban-client unban 172.30.0.29
 *fail2ban-client set sshd unbanip x.x.x.x
 ---------------------------------------------
 ---------------------------------------------
+
+
+---------------------------------------------
+---------------------------------------------
+  CONFIGURAR ROTACION DE BITACORAS DEL HIPS
+---------------------------------------------
+tee /etc/logrotate.d/fail2ban <<EOF
+/var/log/fail2ban.log {
+  daily
+  dateext
+  dateformat -%Y%m%d-%H%M%S
+  missingok
+  rotate 365
+  compress
+  delaycompress
+  su root root
+  create 640 root adm
+  postrotate
+    fail2ban-client flushlogs 1>/dev/null
+  endscript
+}
+EOF
+
+logrotate -vf /etc/logrotate.d/fail2ban
+
+ls -lh /var/log/fail2ban.log
+---------------------------------------------
+---------------------------------------------
