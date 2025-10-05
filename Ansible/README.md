@@ -1,24 +1,33 @@
 # Ansible:
-## 1- Instalamos "Ansible"
+##  1- Instalamos "Ansible"
 `apt -yq install ansible sshpass`
 
-## 2- Verificamos la versión de "Ansible"
+##  2- Verificamos la versión de "Ansible"
 `ansible --version`
 
-## 3- Chequear el acceso a todo el inventario
+##  3- Verificamos el archivo de inventario
+`ansible-inventory --list`
+
+##  4- Chequear el acceso a todo el inventario
 `ansible all -m ping`
 
-## 4- Verificamos las sintaxis del escenario
+##  5- Verificamos las sintaxis del escenario
 `ansible-playbook --syntax-check ../stage.yml`
 
-## 5 - Ejecutamos el escenario
+##  6- Ejecutamos el escenario
 `ansible-playbook ../stage.yml`
 
-## 6 - Ejecutamos algunas tareas del escenario
+##  7- Ejecutamos algunas tareas del escenario
 `ansible-playbook --tags "upgrade" ../stage.yml`
 
-## 7 - Ejecutamos el escenario en un solo servidor
+##  8- Ejecutamos el escenario en un solo servidor
 `ansible-playbook --limit vps --tags "upgrade" ../stage.yml`
+
+##  9- Ejecutamos el escenario en un grupo de servidores
+`ansible-playbook --limit vm ../stage.yml`
+
+## 10- Ejecutamos algunas tareas en un grupo de servidores
+`ansible-playbook --limit vm --tags "upgrade,create-sudo-user,iptables" ../stage.yml`
 
 # Escenarios:
 ## 1- Roles de la Configuración Inicial de Debian

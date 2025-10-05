@@ -1,4 +1,9 @@
 ---
+- name: Configuracion del Homelab
+  tags: homelab
+  hosts: homelab
+  roles:
+    - homelab
 
 - name: Actualizar los indices del repositorio y el sistema operativo
   tags: upgrade

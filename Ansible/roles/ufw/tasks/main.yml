@@ -16,6 +16,7 @@
 
 - name: Permitir el acceso al servicio SSH
   ansible.builtin.ufw:
+    src: 0.0.0.0/0
     rule: limit
     port: "22"
     proto: tcp
@@ -23,6 +24,20 @@
 - name: Habilitar ufw
   ansible.builtin.ufw:
     state: enabled
+
+- name: Deshabilitar conexiones entrantes por defecto
+  ansible.builtin.ufw:
+    direction: incoming
+    policy: deny
+
+- name: Habilitar conexiones salientes por defecto
+  ansible.builtin.ufw:
+    direction: outgoing
+    policy: allow
+
+- name: Deshabilitar conexiones enrutadas por defecto
+  ansible.builtin.ufw:
+    direction: routed
     policy: deny
 
 - name: Habilitar el log
