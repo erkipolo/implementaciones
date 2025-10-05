@@ -1,0 +1,147 @@
+- name: Instalando rsyslog
+  ansible.builtin.apt:
+    name: rsyslog
+    state: latest
+
+- name: Habilitando rsyslog
+  ansible.builtin.systemd:
+    name: rsyslog
+    state: started
+    enabled: yes
+
+- name: Instalando iptables
+  ansible.builtin.apt:
+    name: iptables-persistent
+    state: latest
+
+- name: Configurando conexiones entrantes establecidas y relacionadas
+  ansible.builtin.iptables:
+    chain: INPUT
+    chain_management: true
+    state: present
+    action: append
+    ctstate: ESTABLISHED,RELATED
+    jump: ACCEPT
+    comment: 'Aceptar conexiones establecidas y relacionadas'
+    ip_version: ipv4
+
+- name: Configurando reglas de loopback
+  ansible.builtin.iptables:
+    chain: INPUT
+    chain_management: true
+    state: present
+    action: append
+    in_interface: lo
+    jump: ACCEPT
+    comment: 'permitir todo a la loopback'
+    ip_version: ipv4
+
+- name: Configurando acceso al ICMP
+  ansible.builtin.iptables:
+    chain: INPUT
+    chain_management: true
+    state: present
+    action: append
+    protocol: icmp
+    jump: ACCEPT
+    comment: 'Aceptar entrada al ICMP'
+    ip_version: ipv4
+
+- name: Configurando acceso al servicio SSH
+  ansible.builtin.iptables:
+    chain: INPUT
+    chain_management: true
+    state: present
+    action: append
+    protocol: tcp
+    destination_port: 22
+    source: 0.0.0.0/0
+    ctstate: NEW
+    syn: match
+    limit: 2/second
+    limit_burst: 20
+    jump: ACCEPT
+    comment: 'Aceptar conexiones al servicio SSH'
+    ip_version: ipv4
+
+- name: Bitacorizar el resto del trafico entrante
+  ansible.builtin.iptables:
+    chain: INPUT
+    chain_management: true
+    state: present
+    action: append
+    log_prefix: "Droped by FILTER INPUT: "
+    log_level: info
+    jump: LOG
+    comment: 'Bitacorizar el resto del trafico entrante'
+    ip_version: ipv4
+
+- name: Configurando conexiones enrutadas establecidas y relacionadas
+  ansible.builtin.iptables:
+    chain: FORWARD
+    chain_management: true
+    state: present
+    action: append
+    ctstate: ESTABLISHED,RELATED
+    jump: ACCEPT
+    comment: 'Aceptar conexiones establecidas y relacionadas'
+    ip_version: ipv4
+
+- name: Bitacorizar el resto del trafico enrutado
+  ansible.builtin.iptables:
+    chain: FORWARD
+    chain_management: true
+    state: present
+    action: append
+    log_prefix: "Droped by FILTER FORWARD: "
+    log_level: info
+    jump: LOG
+    comment: 'Bitacorizar el resto del trafico enrutado'
+    ip_version: ipv4
+
+- name: Definir politica por defecto para el trafico entrante
+  ansible.builtin.iptables:
+    chain: INPUT
+    chain_management: true
+    state: present
+    action: append
+    policy: DROP
+    comment: 'Descartar trafico entrante por defecto'
+    ip_version: both
+
+- name: Definir politica por defecto para el trafico enrutado
+  ansible.builtin.iptables:
+    chain: FORWARD
+    chain_management: true
+    state: present
+    action: append
+    policy: DROP
+    comment: 'Descartar trafico enrutado por defecto'
+    ip_version: both
+
+- name: Definir politica por defecto para el trafico saliente IPv4
+  ansible.builtin.iptables:
+    chain: OUTPUT
+    chain_management: true
+    state: present
+    action: append
+    policy: ACCEPT
+    comment: 'Permitir trafico saliente por defecto'
+    ip_version: ipv4
+
+- name: Definir politica por defecto para el trafico saliente IPv6
+  ansible.builtin.iptables:
+    chain: OUTPUT
+    chain_management: true
+    state: present
+    action: append
+    policy: DROP
+    comment: 'Descartar trafico saliente por defecto'
+    ip_version: ipv6
+
+- name: Salvar configuraciones IPv4
+  shell: iptables-save > /etc/iptables/rules.v4
+
+- name: Salvar configuraciones IPv6
+  shell: ip6tables-save > /etc/iptables/rules.v6
+
