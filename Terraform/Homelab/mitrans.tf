@@ -1,6 +1,6 @@
-resource "proxmox_lxc" "cts_host" {
+resource "proxmox_lxc" "docker01_host" {
   cores           = 1
-  hostname        = "cts"
+  hostname        = "docker01"
   memory          = 512
   nameserver      = "192.168.56.1 8.8.8.8"
   onboot          = true
