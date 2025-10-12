@@ -5,7 +5,7 @@ terraform {
   required_providers {
     proxmox = {
       source = "telmate/proxmox"
-      version = ">=2.9.14"
+      version = "3.0.2-rc04"
     }
   }
 }
@@ -27,9 +27,9 @@ pveum user token add terraform@pam provider --privsep=0
 Don't write the credentials inside the terraform main.tf file. Create another and use it as variables content
 
 tee credentials.auto.tfvars <<EOF
-proxmox_api_url         = "https://192.168.56.9:8006/api2/json"
+proxmox_api_url         = "https://172.30.0.23:8006/api2/json"
 proxmox_api_token_id    = "terraform@pam!provider"
-proxmox_api_token_secret = "280eb46c-44b6-4c2b-9318-fdddd3addea2"
+proxmox_api_token_secret = "64d22e01-4537-4dac-b38e-6f24219c71f3"
 EOF
 
 Add how terraform conect to the proxmox server
@@ -107,6 +107,9 @@ resource "proxmox_lxc" "DOCKER_HOST" {
   }
 }
 EOF
+
+Cuando reseteas la virtualizacion
+rm -rfv terraform.tfstate
 
 Execution plan, witch lets you preview the changes that terraform plans to make to your infrastructure
 
