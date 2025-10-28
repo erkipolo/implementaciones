@@ -79,5 +79,7 @@ echo "This is the body" | mail -s "This is the subject" erkipolo@gmail.com
 mailq
 
 postsuper -r ALL && postqueue -f
+
+postsuper -d ALL
 ---------------------------------------------
 ---------------------------------------------

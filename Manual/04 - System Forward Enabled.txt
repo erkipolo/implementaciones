@@ -1,0 +1,9 @@
+== Enable Forward ==
+  tee -a /etc/sysctl.conf <<EOF
+  net.ipv4.ip_forward = 1
+  net.ipv6.conf.all.forwarding = 1
+  EOF
+== Activate the kernels changes ==
+  sysctl -p
+
+sysctl --system

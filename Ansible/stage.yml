@@ -11,6 +11,18 @@
   roles:
     - upgrade
 
+- name: Configuraciones de Control Basicas del Sistema
+  tags: sysctl-config
+  hosts: all
+  roles:
+    - sysctl-config
+
+- name: Habilitar el reenvio de paquetes
+  tags: forward-enabled
+  hosts: all
+  roles:
+    - forward-enabled
+
 - name: Crear un nuevo usuario con privilegios de sudo y acceso SSH por llave
   tags: create-sudo-user
   hosts: all
