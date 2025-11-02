@@ -1,0 +1,8 @@
+- name: Configurar rutas estaticas del router WWW
+  ansible.builtin.lineinfile:
+    path: /etc/network/interfaces
+    line: "{{ item }}"
+    state: present
+  with_items:
+    - 'up ip -4 route add 192.168.40.0/24 via 190.6.78.52'
+  notify: restart_systemd_networkd

@@ -1,0 +1,17 @@
+- name: Permitir el paso al servicio SSH
+  ansible.builtin.ufw:
+    rule: allow
+    route: yes
+    src: 192.168.40.20/32
+    dest: 172.32.16.1/32
+    port: "22"
+    proto: tcp
+
+- name: Permitir el paso al servicio REPO
+  ansible.builtin.ufw:
+    rule: allow
+    route: yes
+    src: 172.32.16.1/32
+    dest: 192.168.40.20/32
+    port: "80,443"
+    proto: tcp

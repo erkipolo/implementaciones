@@ -1,0 +1,49 @@
+- name: Add ufw before content
+  become: true
+  blockinfile:
+    path: /etc/ufw/before.rules
+    insertbefore: BOF
+    content: |
+      # NAT table rules
+      *nat
+      :PREROUTING ACCEPT [0:0]
+      :POSTROUTING ACCEPT [0:0]
+      -A PREROUTING -s 190.6.67.1/32 -d 190.6.67.2/32 -p udp -m udp --dport 53 -m state --state NEW -j DNAT --to-destination 192.168.40.10:53
+      -A PREROUTING -s 190.6.67.1/32 -d 190.6.67.3/32 -p tcp -m tcp --dport 25 -m state --state NEW -j DNAT --to-destination 192.168.40.12:25
+      -A POSTROUTING -s 192.168.40.0/24 -o eth0 -p icmp -m icmp --icmp-type 8 -m state --state NEW -j SNAT --to-source 190.6.67.2
+      -A POSTROUTING -s 192.168.40.0/24 -o eth0 -p udp -m udp -m multiport --dports 123 -m state --state NEW -j SNAT --to-source 190.6.67.2
+      -A POSTROUTING -s 192.168.40.0/24 -o eth0 -p udp -m udp -m multiport --dports 53 -m state --state NEW -j SNAT --to-source 190.6.67.2
+      -A POSTROUTING -s 192.168.40.0/24 -o eth0 -p tcp -m tcp -m multiport --dports 25 -m state --state NEW -j SNAT --to-source 190.6.67.3
+      -A POSTROUTING -s 192.168.40.0/24 -o eth0 -p tcp -m tcp -m multiport --dports 80,443 -m state --state NEW -j SNAT --to-source 190.6.67.4
+      -A POSTROUTING -s 192.168.40.0/24 -o eth0 -p tcp -m tcp -m multiport --dports 22 -m state --state NEW -j SNAT --to-source 190.6.67.5
+      COMMIT
+  notify: reload_ufw
+
+- name: Allow incoming access to eth0 from 1.2.3.5 port 5469 to 1.2.3.4 port 5469
+  ansible.builtin.ufw:
+    rule: allow
+    interface: eth2
+    direction: in
+    proto: tcp
+    src: 190.6.67.1/32
+    from_port: '80'
+    dest: 192.168.40.20/32
+    to_port: '80'
+
+- name: Permitir el paso al servicio SSH
+  ansible.builtin.ufw:
+    rule: allow
+    route: yes
+    src: 192.168.40.20/32
+    dest: 190.6.67.1/32
+    port: "22"
+    proto: tcp
+
+- name: Permitir el paso al servicio REPO
+  ansible.builtin.ufw:
+    rule: allow
+    route: yes
+    src: 190.6.67.1/32
+    dest: 192.168.40.20/32
+    port: "80,443"
+    proto: tcp

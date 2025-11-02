@@ -1,0 +1,13 @@
+/var/log/ufw.log {
+  daily
+  dateext
+  dateformat -%Y%m%d-%H%M%S
+  missingok
+  rotate 365
+  compress
+  su root root
+  create 640 root adm
+  postrotate
+    [ -x /usr/lib/rsyslog/rsyslog-rotate ] && /usr/lib/rsyslog/rsyslog-rotate || true
+  endscript
+}

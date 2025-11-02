@@ -1,0 +1,232 @@
+---
+# Estructura Basica:
+#   a) Rutas Estaticas
+#   b) Sysctl
+#   c) Forward
+#   d) Repositorio
+#   e) Actualizar
+#   f) UFW General
+#   g) UFW Especifico
+
+# DMZ
+
+- name: Configurar rutas estaticas de la DMZ
+  tags: dpvhab-dmz-route
+  hosts:
+    - dmz
+  roles:
+    - dpvhab-dmz-route
+
+- name: Configuraciones de Control Basicas del Sistema
+  tags: sysctl-config
+  hosts:
+    - dmz
+  roles:
+    - sysctl-config
+
+- name: Configurar repositorio dpvhab
+  tags: dpvhab-repo-config
+  hosts:
+    - dmz
+  roles:
+    - dpvhab-repo-config
+
+- name: Actualizar los indices del repositorio y el sistema operativo
+  tags: upgrade
+  hosts:
+    - dmz
+  roles:
+    - upgrade
+
+- name: Habilitar Cortafuegos (ufw)
+  tags: dpvhab-ufw-basic
+  hosts:
+    - dmz
+  roles:
+    - dpvhab-ufw-basic
+
+# Firewalls
+
+- name: Configuraciones de Control Basicas del Sistema
+  tags: sysctl-config
+  hosts:
+    - firewalls
+  roles:
+    - sysctl-config
+
+- name: Habilitar el reenvio de paquetes
+  tags: forward-enabled
+  hosts:
+    - firewalls
+  roles:
+    - forward-enabled
+
+- name: Configurar repositorio dpvhab
+  tags: dpvhab-repo-config
+  hosts:
+    - firewalls
+  roles:
+    - dpvhab-repo-config
+
+- name: Actualizar los indices del repositorio y el sistema operativo
+  tags: upgrade
+  hosts:
+    - firewalls
+  roles:
+    - upgrade
+
+- name: Habilitar Cortafuegos (ufw)
+  tags: dpvhab-ufw-basic
+  hosts:
+    - firewalls
+  roles:
+    - dpvhab-ufw-basic
+
+- name: Configurar Cortafuegos VPN (ufw)
+  tags: dpvhab-ufw-vpn-fw
+  hosts:
+    - fw1
+  roles:
+    - dpvhab-ufw-vpn-fw
+
+- name: Configurar Cortafuegos WWW (ufw)
+  tags: dpvhab-ufw-www-fw
+  hosts:
+    - fw2
+  roles:
+    - dpvhab-ufw-www-fw
+
+- name: Configurar Cortafuegos NAC (ufw)
+  tags: dpvhab-ufw-nac-fw
+  hosts:
+    - fw3
+  roles:
+    - dpvhab-ufw-nac-fw
+
+# Routers
+
+- name: Configurar rutas estaticas del router VPN
+  tags: dpvhab-vpn-router-route
+  hosts:
+    - r1
+  roles:
+    - dpvhab-vpn-router-route
+
+- name: Configuraciones de Control Basicas del Sistema
+  tags: sysctl-config
+  hosts:
+    - r1
+  roles:
+    - sysctl-config
+
+- name: Habilitar el reenvio de paquetes del router VPN
+  tags: forward-enabled
+  hosts:
+    - r1
+  roles:
+    - forward-enabled
+
+- name: Configurar repositorio dpvhab
+  tags: dpvhab-repo-config
+  hosts:
+    - r1
+  roles:
+    - dpvhab-repo-config
+
+- name: Actualizar los indices del repositorio y el sistema operativo
+  tags: upgrade
+  hosts:
+    - r1
+  roles:
+    - upgrade
+
+- name: Habilitar Cortafuegos (ufw) para router
+  tags: dpvhab-ufw-basic-router
+  hosts:
+    - r1
+  roles:
+    - dpvhab-ufw-basic-router
+
+- name: Configurar rutas estaticas del router WWW
+  tags: dpvhab-www-router-route
+  hosts:
+    - r2
+  roles:
+    - dpvhab-www-router-route
+
+- name: Configuraciones de Control Basicas del Sistema
+  tags: sysctl-config
+  hosts:
+    - r2
+  roles:
+    - sysctl-config
+
+- name: Habilitar el reenvio de paquetes del router VPN
+  tags: forward-enabled
+  hosts:
+    - r2
+  roles:
+    - forward-enabled
+
+- name: Configurar repositorio dpvhab
+  tags: dpvhab-repo-config
+  hosts:
+    - r2
+  roles:
+    - dpvhab-repo-config
+
+- name: Actualizar los indices del repositorio y el sistema operativo
+  tags: upgrade
+  hosts:
+    - r2
+  roles:
+    - upgrade
+
+- name: Habilitar Cortafuegos (ufw) para router
+  tags: dpvhab-ufw-www-router
+  hosts:
+    - r2
+  roles:
+    - dpvhab-ufw-www-router
+
+- name: Configurar rutas estaticas del router WWW
+  tags: dpvhab-nac-router-route
+  hosts:
+    - r3
+  roles:
+    - dpvhab-nac-router-route
+
+- name: Configuraciones de Control Basicas del Sistema
+  tags: sysctl-config
+  hosts:
+    - r3
+  roles:
+    - sysctl-config
+
+- name: Habilitar el reenvio de paquetes del router VPN
+  tags: forward-enabled
+  hosts:
+    - r3
+  roles:
+    - forward-enabled
+
+- name: Configurar repositorio dpvhab
+  tags: dpvhab-repo-config
+  hosts:
+    - r3
+  roles:
+    - dpvhab-repo-config
+
+- name: Actualizar los indices del repositorio y el sistema operativo
+  tags: upgrade
+  hosts:
+    - r3
+  roles:
+    - upgrade
+
+- name: Habilitar Cortafuegos (ufw) para router
+  tags: dpvhab-ufw-nac-router
+  hosts:
+    - r3
+  roles:
+    - dpvhab-ufw-nac-router

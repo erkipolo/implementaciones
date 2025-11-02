@@ -1,0 +1,6 @@
+- name: reload_ufw
+  ansible.builtin.systemd_service:
+    name: ufw
+    masked: no
+    enabled: true
+    state: restarted
