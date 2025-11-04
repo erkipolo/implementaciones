@@ -1,0 +1,184 @@
+- name: Instalando Bind9
+  ansible.builtin.apt:
+    name: bind9
+    state: latest
+
+- name: Copiar configuracion principal
+  ansible.builtin.copy:
+    src: "named.conf"
+    dest: /etc/bind/named.conf
+    owner: root
+    group: bind
+    mode: '0644'
+  notify: restart_bind9
+
+- name: Copiar configuracion de bitacoras
+  ansible.builtin.copy:
+    src: "named.conf.logging"
+    dest: /etc/bind/named.conf.logging
+    owner: root
+    group: bind
+    mode: '0644'
+  notify: restart_bind9
+
+- name: Copiar configuracion de opciones
+  ansible.builtin.copy:
+    src: "named.conf.options"
+    dest: /etc/bind/named.conf.options
+    owner: root
+    group: bind
+    mode: '0644'
+  notify: restart_bind9
+
+- name: Copiar configuracion local
+  ansible.builtin.copy:
+    src: "named.conf.local"
+    dest: /etc/bind/named.conf.local
+    owner: root
+    group: bind
+    mode: '0644'
+  notify: restart_bind9
+
+- name: Copiar configuracion internacional
+  ansible.builtin.copy:
+    src: "named.conf.www"
+    dest: /etc/bind/named.conf.www
+    owner: root
+    group: bind
+    mode: '0644'
+  notify: restart_bind9
+
+- name: Copiar configuracion nacional
+  ansible.builtin.copy:
+    src: "named.conf.nac"
+    dest: /etc/bind/named.conf.nac
+    owner: root
+    group: bind
+    mode: '0644'
+  notify: restart_bind9
+
+- name: Copiar configuracion dmz
+  ansible.builtin.copy:
+    src: "named.conf.dmz"
+    dest: /etc/bind/named.conf.dmz
+    owner: root
+    group: bind
+    mode: '0644'
+  notify: restart_bind9
+
+- name: Copiar configuracion apn
+  ansible.builtin.copy:
+    src: "named.conf.apn"
+    dest: /etc/bind/named.conf.apn
+    owner: root
+    group: bind
+    mode: '0644'
+  notify: restart_bind9
+
+- name: Copiar descripcion internacional directa
+  ansible.builtin.copy:
+    src: "www.dir"
+    dest: /var/cache/bind/www.dir
+    owner: bind
+    group: bind
+    mode: '0644'
+  notify: restart_bind9
+
+- name: Copiar descripcion internacional delegada
+  ansible.builtin.copy:
+    src: "www.del"
+    dest: /var/cache/bind/www.del
+    owner: bind
+    group: bind
+    mode: '0644'
+  notify: restart_bind9
+
+- name: Copiar descripcion internacional inversa
+  ansible.builtin.copy:
+    src: "www.inv"
+    dest: /var/cache/bind/www.inv
+    owner: bind
+    group: bind
+    mode: '0644'
+  notify: restart_bind9
+
+- name: Copiar descripcion nacional directa
+  ansible.builtin.copy:
+    src: "nac.dir"
+    dest: /var/cache/bind/nac.dir
+    owner: bind
+    group: bind
+    mode: '0644'
+  notify: restart_bind9
+
+- name: Copiar descripcion nacional delegada
+  ansible.builtin.copy:
+    src: "nac.del"
+    dest: /var/cache/bind/nac.del
+    owner: bind
+    group: bind
+    mode: '0644'
+  notify: restart_bind9
+
+- name: Copiar descripcion nacional inversa
+  ansible.builtin.copy:
+    src: "nac.inv"
+    dest: /var/cache/bind/nac.inv
+    owner: bind
+    group: bind
+    mode: '0644'
+  notify: restart_bind9
+
+- name: Copiar descripcion dmz directa
+  ansible.builtin.copy:
+    src: "dmz.dir"
+    dest: /var/cache/bind/dmz.dir
+    owner: bind
+    group: bind
+    mode: '0644'
+  notify: restart_bind9
+
+- name: Copiar descripcion dmz inversa
+  ansible.builtin.copy:
+    src: "dmz.inv"
+    dest: /var/cache/bind/dmz.inv
+    owner: bind
+    group: bind
+    mode: '0644'
+  notify: restart_bind9
+
+- name: Copiar descripcion apn directa
+  ansible.builtin.copy:
+    src: "apn.dir"
+    dest: /var/cache/bind/apn.dir
+    owner: bind
+    group: bind
+    mode: '0644'
+  notify: restart_bind9
+
+- name: Copiar descripcion apn inversa
+  ansible.builtin.copy:
+    src: "apn.inv"
+    dest: /var/cache/bind/apn.inv
+    owner: bind
+    group: bind
+    mode: '0644'
+  notify: restart_bind9
+
+- name: Creando carpeta de bitacoras
+  ansible.builtin.file:
+    path: /var/log/named
+    state: directory
+    owner: bind
+    group: bind
+    mode: '0755'
+
+- name: Copiando archivo de rotacion de bitacoras
+  ansible.builtin.copy:
+    src: "named"
+    dest: /etc/logrotate.d/named
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart_bind9
+

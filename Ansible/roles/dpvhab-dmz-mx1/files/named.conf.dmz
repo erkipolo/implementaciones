@@ -1,0 +1,8 @@
+zone "dpvhab.cu" {
+  type master;
+  file "dmz.dir";
+};
+zone "40.168.192.in-addr.arpa" {
+  type master;
+  file "dmz.inv";
+};

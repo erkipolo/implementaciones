@@ -5,228 +5,222 @@
 #   c) Forward
 #   d) Repositorio
 #   e) Actualizar
-#   f) UFW General
-#   g) UFW Especifico
+#   f) FW General
+#   g) FW Especifico
 
-# DMZ
+# DMZ Servers
+
+- name: Eliminando el SMTP por defecto
+  tags: debian-ct-smtp-remove
+  hosts:
+    - ns1
+    - proxy
+  roles:
+    - debian-ct-smtp-remove
 
 - name: Configurar rutas estaticas de la DMZ
-  tags: dpvhab-dmz-route
+  tags: dpvhab-dmz-servers-route
   hosts:
     - dmz
   roles:
-    - dpvhab-dmz-route
+    - dpvhab-dmz-servers-route
 
 - name: Configuraciones de Control Basicas del Sistema
-  tags: sysctl-config
+  tags: debian-basic-sysctl-config
   hosts:
     - dmz
   roles:
-    - sysctl-config
+    - debian-basic-sysctl-config
 
 - name: Configurar repositorio dpvhab
-  tags: dpvhab-repo-config
+  tags: dpvhab-dmz-repo-config
   hosts:
     - dmz
   roles:
-    - dpvhab-repo-config
+    - dpvhab-dmz-repo-config
 
 - name: Actualizar los indices del repositorio y el sistema operativo
-  tags: upgrade
+  tags: debian-upgrade
   hosts:
     - dmz
   roles:
-    - upgrade
+    - debian-upgrade
 
-- name: Habilitar Cortafuegos (ufw)
-  tags: dpvhab-ufw-basic
+- name: Habilitar Cortafuegos (iptables)
+  tags: dpvhab-dmz-basic-iptables
   hosts:
     - dmz
   roles:
-    - dpvhab-ufw-basic
+    - dpvhab-dmz-basic-iptables
+
+- name: DNS con vistas
+  tags: dpvhab-dmz-dns1
+  hosts:
+    - ns1
+  roles:
+    - dpvhab-dmz-dns1
+
+- name: Habilitar Cortafuegos DNS (iptables)
+  tags: dpvhab-dmz-dns1-iptables
+  hosts:
+    - ns1
+  roles:
+    - dpvhab-dmz-dns1-iptables
+
+- name: SMTP Relay
+  tags: dpvhab-dmz-mx1
+  hosts:
+    - mx1
+  roles:
+    - dpvhab-dmz-mx1
+
+- name: Habilitar Cortafuegos SMTP (iptables)
+  tags: dpvhab-dmz-mx1-iptables
+  hosts:
+    - mx1
+  roles:
+    - dpvhab-dmz-mx1-iptables
 
 # Firewalls
 
-- name: Configuraciones de Control Basicas del Sistema
-  tags: sysctl-config
+- name: Eliminando el SMTP por defecto
+  tags: debian-ct-smtp-remove
   hosts:
     - firewalls
   roles:
-    - sysctl-config
+    - debian-ct-smtp-remove
+
+- name: Configuraciones de Control Basicas del Sistema
+  tags: debian-basic-sysctl-config
+  hosts:
+    - firewalls
+  roles:
+    - debian-basic-sysctl-config
 
 - name: Habilitar el reenvio de paquetes
-  tags: forward-enabled
+  tags: debian-basic-sysctl-forward
   hosts:
     - firewalls
   roles:
-    - forward-enabled
+    - debian-basic-sysctl-forward
 
 - name: Configurar repositorio dpvhab
-  tags: dpvhab-repo-config
+  tags: dpvhab-dmz-repo-config
   hosts:
     - firewalls
   roles:
-    - dpvhab-repo-config
+    - dpvhab-dmz-repo-config
 
 - name: Actualizar los indices del repositorio y el sistema operativo
-  tags: upgrade
+  tags: debian-upgrade
   hosts:
     - firewalls
   roles:
-    - upgrade
+    - debian-upgrade
 
-- name: Habilitar Cortafuegos (ufw)
-  tags: dpvhab-ufw-basic
+- name: Habilitar Cortafuegos (iptables)
+  tags: dpvhab-dmz-basic-iptables
   hosts:
     - firewalls
   roles:
-    - dpvhab-ufw-basic
+    - dpvhab-dmz-basic-iptables
 
-- name: Configurar Cortafuegos VPN (ufw)
-  tags: dpvhab-ufw-vpn-fw
+- name: Configurar Cortafuegos VPN (iptables)
+  tags: dpvhab-edge-vpn-fw-iptables
   hosts:
     - fw1
   roles:
-    - dpvhab-ufw-vpn-fw
+    - dpvhab-edge-vpn-fw-iptables
 
-- name: Configurar Cortafuegos WWW (ufw)
-  tags: dpvhab-ufw-www-fw
+- name: Configurar Cortafuegos WWW (iptables)
+  tags: dpvhab-edge-www-fw-iptables
   hosts:
     - fw2
   roles:
-    - dpvhab-ufw-www-fw
+    - dpvhab-edge-www-fw-iptables
 
-- name: Configurar Cortafuegos NAC (ufw)
-  tags: dpvhab-ufw-nac-fw
+- name: Configurar Cortafuegos NAC (iptables)
+  tags: dpvhab-edge-nac-fw-iptables
   hosts:
     - fw3
   roles:
-    - dpvhab-ufw-nac-fw
+    - dpvhab-edge-nac-fw-iptables
 
 # Routers
 
+- name: Eliminando el SMTP por defecto
+  tags: debian-ct-smtp-remove
+  hosts:
+    - routers
+  roles:
+    - debian-ct-smtp-remove
+
 - name: Configurar rutas estaticas del router VPN
-  tags: dpvhab-vpn-router-route
+  tags: dpvhab-edge-router-vpn-route
   hosts:
     - r1
   roles:
-    - dpvhab-vpn-router-route
+    - dpvhab-edge-router-vpn-route
 
 - name: Configuraciones de Control Basicas del Sistema
-  tags: sysctl-config
+  tags: debian-basic-sysctl-config
   hosts:
-    - r1
+    - routers
   roles:
-    - sysctl-config
+    - debian-basic-sysctl-config
 
 - name: Habilitar el reenvio de paquetes del router VPN
-  tags: forward-enabled
+  tags: debian-basic-sysctl-forward
   hosts:
-    - r1
+    - routers
   roles:
-    - forward-enabled
+    - debian-basic-sysctl-forward
 
 - name: Configurar repositorio dpvhab
-  tags: dpvhab-repo-config
+  tags: dpvhab-dmz-repo-config
   hosts:
     - r1
   roles:
-    - dpvhab-repo-config
-
-- name: Actualizar los indices del repositorio y el sistema operativo
-  tags: upgrade
-  hosts:
-    - r1
-  roles:
-    - upgrade
-
-- name: Habilitar Cortafuegos (ufw) para router
-  tags: dpvhab-ufw-basic-router
-  hosts:
-    - r1
-  roles:
-    - dpvhab-ufw-basic-router
-
-- name: Configurar rutas estaticas del router WWW
-  tags: dpvhab-www-router-route
-  hosts:
-    - r2
-  roles:
-    - dpvhab-www-router-route
-
-- name: Configuraciones de Control Basicas del Sistema
-  tags: sysctl-config
-  hosts:
-    - r2
-  roles:
-    - sysctl-config
-
-- name: Habilitar el reenvio de paquetes del router VPN
-  tags: forward-enabled
-  hosts:
-    - r2
-  roles:
-    - forward-enabled
+    - dpvhab-dmz-repo-config
 
 - name: Configurar repositorio dpvhab
-  tags: dpvhab-repo-config
+  tags: dpvhab-edge-www-repo-config
   hosts:
     - r2
   roles:
-    - dpvhab-repo-config
-
-- name: Actualizar los indices del repositorio y el sistema operativo
-  tags: upgrade
-  hosts:
-    - r2
-  roles:
-    - upgrade
-
-- name: Habilitar Cortafuegos (ufw) para router
-  tags: dpvhab-ufw-www-router
-  hosts:
-    - r2
-  roles:
-    - dpvhab-ufw-www-router
-
-- name: Configurar rutas estaticas del router WWW
-  tags: dpvhab-nac-router-route
-  hosts:
-    - r3
-  roles:
-    - dpvhab-nac-router-route
-
-- name: Configuraciones de Control Basicas del Sistema
-  tags: sysctl-config
-  hosts:
-    - r3
-  roles:
-    - sysctl-config
-
-- name: Habilitar el reenvio de paquetes del router VPN
-  tags: forward-enabled
-  hosts:
-    - r3
-  roles:
-    - forward-enabled
+    - dpvhab-edge-www-repo-config
 
 - name: Configurar repositorio dpvhab
-  tags: dpvhab-repo-config
+  tags: dpvhab-edge-nac-repo-config
   hosts:
     - r3
   roles:
-    - dpvhab-repo-config
+    - dpvhab-edge-nac-repo-config
 
 - name: Actualizar los indices del repositorio y el sistema operativo
-  tags: upgrade
+  tags: debian-upgrade
   hosts:
-    - r3
+    - routers
   roles:
-    - upgrade
+    - debian-upgrade
 
-- name: Habilitar Cortafuegos (ufw) para router
-  tags: dpvhab-ufw-nac-router
+- name: Habilitar Cortafuegos (iptables)
+  tags: dpvhab-routers-vpn-iptables
+  hosts:
+    - r1
+  roles:
+    - dpvhab-routers-vpn-iptables
+
+- name: Habilitar Cortafuegos (iptables)
+  tags: dpvhab-routers-www-iptables
+  hosts:
+    - r2
+  roles:
+    - dpvhab-routers-www-iptables
+
+- name: Habilitar Cortafuegos (iptables)
+  tags: dpvhab-routers-nac-iptables
   hosts:
     - r3
   roles:
-    - dpvhab-ufw-nac-router
+    - dpvhab-routers-nac-iptables

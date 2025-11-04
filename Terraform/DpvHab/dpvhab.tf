@@ -1,14 +1,14 @@
 resource "proxmox_lxc" "r1" {
   cores           = 1
   hostname        = "r1"
-  memory          = 512
-  nameserver      = "192.168.40.10"
+  memory          = 1024
+  nameserver      = "172.32.16.20"
   onboot          = true
   ostemplate      = "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
   ssh_public_keys = var.ct_ssh_public_key
   searchdomain    = "dpvhab.cu"
   start           = true
-  swap            = 512
+  swap            = 1024
   target_node     = "node01"
   unprivileged    = true
   vmid            = 101
@@ -37,14 +37,14 @@ resource "proxmox_lxc" "r1" {
 resource "proxmox_lxc" "r2" {
   cores           = 1
   hostname        = "r2"
-  memory          = 512
-  nameserver      = "192.168.40.10"
+  memory          = 1024
+  nameserver      = "190.6.78.50"
   onboot          = true
   ostemplate      = "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
   ssh_public_keys = var.ct_ssh_public_key
   searchdomain    = "dpvhab.cu"
   start           = true
-  swap            = 512
+  swap            = 1024
   target_node     = "node01"
   unprivileged    = true
   vmid            = 102
@@ -73,14 +73,14 @@ resource "proxmox_lxc" "r2" {
 resource "proxmox_lxc" "r3" {
   cores           = 1
   hostname        = "r3"
-  memory          = 512
-  nameserver      = "192.168.40.10"
+  memory          = 1024
+  nameserver      = "190.6.67.2"
   onboot          = true
   ostemplate      = "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
   ssh_public_keys = var.ct_ssh_public_key
   searchdomain    = "dpvhab.cu"
   start           = true
-  swap            = 512
+  swap            = 1024
   target_node     = "node01"
   unprivileged    = true
   vmid            = 103
@@ -109,14 +109,14 @@ resource "proxmox_lxc" "r3" {
 resource "proxmox_lxc" "fw1" {
   cores           = 1
   hostname        = "fw1"
-  memory          = 512
+  memory          = 1024
   nameserver      = "192.168.40.10"
   onboot          = true
   ostemplate      = "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
   ssh_public_keys = var.ct_ssh_public_key
   searchdomain    = "dpvhab.cu"
   start           = true
-  swap            = 512
+  swap            = 1024
   target_node     = "node01"
   unprivileged    = true
   vmid            = 201
@@ -145,14 +145,14 @@ resource "proxmox_lxc" "fw1" {
 resource "proxmox_lxc" "fw2" {
   cores           = 1
   hostname        = "fw2"
-  memory          = 512
+  memory          = 1024
   nameserver      = "192.168.40.10"
   onboot          = true
   ostemplate      = "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
   ssh_public_keys = var.ct_ssh_public_key
   searchdomain    = "dpvhab.cu"
   start           = true
-  swap            = 512
+  swap            = 1024
   target_node     = "node01"
   unprivileged    = true
   vmid            = 202
@@ -205,14 +205,14 @@ resource "proxmox_lxc" "fw2" {
 resource "proxmox_lxc" "fw3" {
   cores           = 1
   hostname        = "fw3"
-  memory          = 512
+  memory          = 1024
   nameserver      = "192.168.40.10"
   onboot          = true
   ostemplate      = "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
   ssh_public_keys = var.ct_ssh_public_key
   searchdomain    = "dpvhab.cu"
   start           = true
-  swap            = 512
+  swap            = 1024
   target_node     = "node01"
   unprivileged    = true
   vmid            = 203
@@ -265,14 +265,14 @@ resource "proxmox_lxc" "fw3" {
 resource "proxmox_lxc" "ns1" {
   cores           = 1
   hostname        = "ns1"
-  memory          = 512
+  memory          = 1024
   nameserver      = "192.168.40.10"
   onboot          = true
   ostemplate      = "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
   ssh_public_keys = var.ct_ssh_public_key
   searchdomain    = "dpvhab.cu"
   start           = true
-  swap            = 512
+  swap            = 1024
   target_node     = "node01"
   unprivileged    = true
   vmid            = 310
@@ -295,14 +295,14 @@ resource "proxmox_lxc" "ns1" {
 resource "proxmox_lxc" "mx1" {
   cores           = 1
   hostname        = "mx1"
-  memory          = 512
+  memory          = 1024
   nameserver      = "192.168.40.10"
   onboot          = true
   ostemplate      = "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
   ssh_public_keys = var.ct_ssh_public_key
   searchdomain    = "dpvhab.cu"
   start           = true
-  swap            = 512
+  swap            = 1024
   target_node     = "node01"
   unprivileged    = true
   vmid            = 312
@@ -325,14 +325,14 @@ resource "proxmox_lxc" "mx1" {
 resource "proxmox_lxc" "proxy" {
   cores           = 1
   hostname        = "proxy"
-  memory          = 512
+  memory          = 1024
   nameserver      = "192.168.40.10"
   onboot          = true
   ostemplate      = "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
   ssh_public_keys = var.ct_ssh_public_key
   searchdomain    = "dpvhab.cu"
   start           = true
-  swap            = 512
+  swap            = 1024
   target_node     = "node01"
   unprivileged    = true
   vmid            = 400
@@ -361,14 +361,14 @@ resource "proxmox_lxc" "proxy" {
 resource "proxmox_lxc" "mail" {
   cores           = 1
   hostname        = "mail"
-  memory          = 512
+  memory          = 1024
   nameserver      = "192.168.40.10"
   onboot          = true
   ostemplate      = "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
   ssh_public_keys = var.ct_ssh_public_key
   searchdomain    = "dpvhab.cu"
   start           = true
-  swap            = 512
+  swap            = 1024
   target_node     = "node01"
   unprivileged    = true
   vmid            = 401

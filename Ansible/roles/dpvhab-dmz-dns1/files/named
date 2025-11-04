@@ -1,0 +1,13 @@
+/var/log/named/*.log
+{
+	daily
+	dateext
+	dateformat -%Y%m%d%H%M
+	missingok
+	rotate 365
+	compress
+	create 660 bind bind
+	postrotate
+		/usr/sbin/rndc reconfig > /dev/null 2>/dev/null || true
+	endscript
+}

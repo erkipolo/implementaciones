@@ -1,0 +1,144 @@
+- name: Aceptando conexiones enrutadas de SSH
+  ansible.builtin.iptables:
+    table: filter
+    chain: FORWARD
+    chain_management: true
+    state: present
+    action: append
+    protocol: tcp
+    destination_port: 22
+    source: 192.168.40.20/32
+    destination: 190.6.78.49/32
+    ctstate: NEW
+    syn: match
+    limit: 2/second
+    limit_burst: 20
+    jump: ACCEPT
+    comment: 'SSH'
+    ip_version: ipv4
+  notify: save_rules
+
+- name: Aceptando conexiones enrutadas de REPO
+  ansible.builtin.iptables:
+    table: filter
+    chain: FORWARD
+    chain_management: true
+    state: present
+    action: append
+    protocol: tcp
+    destination_port: 80
+    source: 190.6.78.49/32
+    destination: 192.168.40.20/32
+    ctstate: NEW
+    syn: match
+    jump: ACCEPT
+    comment: 'REPO'
+    ip_version: ipv4
+  notify: save_rules
+
+- name: Aceptando conexiones enrutadas de REPO
+  ansible.builtin.iptables:
+    table: nat
+    chain: PREROUTING
+    chain_management: true
+    state: present
+    action: append
+    protocol: tcp
+    destination_port: 80
+    source: 190.6.78.49/32
+    destination: 190.6.78.52/32
+    to_destination: 192.168.40.20
+    ctstate: NEW
+    syn: match
+    jump: DNAT
+    comment: 'REPO'
+    ip_version: ipv4
+  notify: save_rules
+
+- name: Enmascarando conexiones salientes de PING
+  ansible.builtin.iptables:
+    table: nat
+    chain: POSTROUTING
+    chain_management: true
+    state: present
+    action: append
+    protocol: icmp
+    source: 192.168.40.20/32
+    destination: 190.6.78.49/32
+    to_source: 190.6.78.50
+    ctstate: NEW
+    jump: SNAT
+    comment: 'PING'
+    ip_version: ipv4
+  notify: save_rules
+
+- name: Enmascarando conexiones salientes de SSH
+  ansible.builtin.iptables:
+    table: nat
+    chain: POSTROUTING
+    chain_management: true
+    state: present
+    action: append
+    protocol: tcp
+    destination_port: 22
+    source: 192.168.40.20/32
+    destination: 190.6.78.49/32
+    to_source: 190.6.78.53
+    ctstate: NEW
+    syn: match
+    jump: SNAT
+    comment: 'SSH'
+    ip_version: ipv4
+  notify: save_rules
+
+- name: Aceptando conexiones enrutadas de DNS
+  ansible.builtin.iptables:
+    table: nat
+    chain: PREROUTING
+    chain_management: true
+    state: present
+    action: append
+    protocol: udp
+    destination_port: 53
+    source: 0.0.0.0/0
+    destination: 190.6.78.50/32
+    to_destination: 192.168.40.10
+    ctstate: NEW
+    jump: DNAT
+    comment: 'DNS'
+    ip_version: ipv4
+  notify: save_rules
+
+- name: Aceptando conexiones enrutadas de DNS
+  ansible.builtin.iptables:
+    chain: FORWARD
+    chain_management: true
+    state: present
+    action: append
+    protocol: udp
+    destination_port: 53
+    source: 0.0.0.0/0
+    destination: 192.168.40.10/32
+    ctstate: NEW
+    jump: ACCEPT
+    comment: 'DNS'
+    ip_version: ipv4
+  notify: save_rules
+
+- name: Enmascarando conexiones salientes de DNS
+  ansible.builtin.iptables:
+    table: nat
+    chain: POSTROUTING
+    chain_management: true
+    state: present
+    action: append
+    protocol: udp
+    source: 192.168.40.10/32
+    destination: 0.0.0.0/0
+    to_source: 190.6.78.50
+    ctstate: NEW
+    jump: SNAT
+    comment: 'DNS'
+    ip_version: ipv4
+  notify: save_rules
+
