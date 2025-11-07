@@ -1,0 +1,85 @@
+---------------------------------------------
+---------------------------------------------
+  CONFIGURAR POSTFIX PARA SOLO ENVIO
+---------------------------------------------
+apt -yq install postfix
+  General mail configuration type:
+    Sitio de Internet
+  System mail name
+    mitrans.gob.cu
+
+dpkg-reconfigure postfix
+  General mail configuration type:
+    Sitio de Internet
+  System mail name
+    mitrans.gob.cu
+  Recipient for root and postmaster
+    erkipolo@gmail.com
+  Otros destinos
+    docker01.mitrans.gob.cu, mitrans.gob.cu, localhost.mitrans.gob.cu, localhost
+  Local networks
+    127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
+  Mailbox size limit
+    0
+  Local address extension character
+    +
+  Protocolos a usar
+    todos
+
+newaliases
+
+postconf -e 'maillog_file = /var/log/mail.log'
+
+postfix check
+
+systemctl restart postfix
+---------------------------------------------
+---------------------------------------------
+
+
+---------------------------------------------
+---------------------------------------------
+  CONFIGURAR ROTACION DE BITACORAS DE POSTFIX
+---------------------------------------------
+tee /etc/logrotate.d/postfix <<EOF
+/var/log/mail.log {
+  daily
+  dateext
+  dateformat -%Y%m%d-%H%M%S
+  missingok
+  rotate 365
+  compress
+  su root root
+  create 640 root root
+  postrotate
+    if [ -d /run/systemd/system ] && command systemctl >/dev/null 2>&1 && systemctl is-active --quiet postlogd.service; then
+      systemctl kill --kill-who main --signal=SIGHUP postlogd.service
+    else
+      invoke-rc.d postfix reload > /dev/null
+    fi
+  endscript
+}
+EOF
+
+logrotate -vf /etc/logrotate.d/postfix
+
+ls -lh /var/log/mail.log
+---------------------------------------------
+---------------------------------------------
+
+
+---------------------------------------------
+---------------------------------------------
+  PROBAR EL ENVIO DE CORREO A GMAIL
+---------------------------------------------
+apt -yq install mailutils
+
+echo "This is the body" | mail -s "This is the subject" erkipolo@gmail.com
+
+mailq
+
+postsuper -r ALL && postqueue -f
+
+postsuper -d ALL
+---------------------------------------------
+---------------------------------------------

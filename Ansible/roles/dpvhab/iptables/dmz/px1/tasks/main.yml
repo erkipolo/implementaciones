@@ -1,0 +1,15 @@
+- name: Aceptando conexiones entrantes de PROXY
+  ansible.builtin.iptables:
+    table: filter
+    chain: INPUT
+    chain_management: true
+    state: present
+    action: append
+    protocol: tcp
+    destination_port: 25
+    source: 10.16.0.0/17
+    ctstate: NEW
+    jump: ACCEPT
+    comment: 'PROXY'
+    ip_version: ipv4
+  notify: save_rules

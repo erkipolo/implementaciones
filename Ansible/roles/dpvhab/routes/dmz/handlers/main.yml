@@ -1,0 +1,6 @@
+- name: restart_systemd_networkd
+  ansible.builtin.systemd_service:
+    name: networking
+    masked: no
+    enabled: true
+    state: restarted

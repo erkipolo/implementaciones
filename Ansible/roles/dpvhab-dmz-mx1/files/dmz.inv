@@ -1,0 +1,23 @@
+$ORIGIN 40.168.192.in-addr.arpa.
+$TTL  86400
+@  IN  SOA  dpvhab.cu. root.dpvhab.cu. (
+   2020040291    ; Serial
+         3600    ; Refresh
+          900    ; Retry
+      1209600    ; Expire
+        86400 )  ; Negative Cache TTL
+;
+@   IN  NS    ns1.dpvhab.cu.
+14  IN  PTR   dpvhab.cu.
+;
+1   IN  PTR   fw2.dpvhab.cu.
+2   IN  PTR   fw3.dpvhab.cu.
+3   IN  PTR   fw1.dpvhab.cu.
+;
+10  IN  PTR   ns1.dpvhab.cu.
+12  IN  PTR   mx.dpvhab.cu.
+20  IN  PTR   repo.dpvhab.cu.
+;
+30  IN  PTR   proxy.dpvhab.cu.
+;
+250 IN  PTR   node01.dpvhab.cu.

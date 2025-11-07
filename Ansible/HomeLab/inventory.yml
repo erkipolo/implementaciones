@@ -1,0 +1,11 @@
+all:
+  children:
+    homelab:
+      hosts:
+        cts:
+          ansible_host: 192.168.56.8
+    mitrans:
+      hosts:
+        docker01:
+          ansible_host: 172.30.0.21
+

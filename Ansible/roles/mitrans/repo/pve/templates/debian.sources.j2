@@ -1,0 +1,29 @@
+Types: deb
+Languages: es
+Architectures: amd64
+Uris: http://ftp.debian.org/debian
+Suites: trixie trixie-updates
+Components: contrib main non-free non-free-firmware
+Enabled: yes
+
+Types: deb
+Languages: es
+Architectures: amd64
+Uris: http://security.debian.org/debian-security
+Suites: trixie-security
+Components: contrib main non-free non-free-firmware
+Enabled: yes
+
+Types: deb
+Uris: http://172.30.0.50/debian
+Suites: trixie trixie-updates
+Components: main contrib non-free-firmware
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+Enabled: no
+
+Types: deb
+Uris: http://172.30.0.50/debian-security
+Suites: trixie-security
+Components: main contrib non-free-firmware
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+Enabled: no

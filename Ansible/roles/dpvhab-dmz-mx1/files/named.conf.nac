@@ -1,0 +1,12 @@
+zone "dpvhab.cu" {
+  type master;
+  file "nac.dir";
+};
+zone "67.6.190.in-addr.arpa" {
+  type master;
+  file "nac.inv";
+};
+zone "0/29.67.6.190.in-addr.arpa" {
+  type master;
+  file "nac.del";
+};

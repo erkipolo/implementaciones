@@ -1,0 +1,12 @@
+zone "dpvhab.cu" {
+  type master;
+  file "www.dir";
+};
+zone "78.6.190.in-addr.arpa" {
+  type master;
+  file "www.inv";
+};
+zone "48/29.78.6.190.in-addr.arpa" {
+  type master;
+  file "www.del";
+};

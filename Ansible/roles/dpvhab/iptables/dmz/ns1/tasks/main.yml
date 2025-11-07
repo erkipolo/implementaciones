@@ -1,0 +1,15 @@
+- name: Aceptando conexiones entrantes de DNS
+  ansible.builtin.iptables:
+    table: filter
+    chain: INPUT
+    chain_management: true
+    state: present
+    action: append
+    protocol: udp
+    destination_port: 53
+    source: 0.0.0.0/0
+    ctstate: NEW
+    jump: ACCEPT
+    comment: 'DNS'
+    ip_version: ipv4
+  notify: save_rules

@@ -1,0 +1,57 @@
+---------------------------------------------
+---------------------------------------------
+  CONFIGURAR ACTUALIZACIONES AUTOMATICAS
+---------------------------------------------
+apt -yq install unattended-upgrades
+
+tee /etc/apt/apt.conf.d/52unattended-upgrades-local <<EOF
+Unattended-Upgrade::Origins-Pattern {
+  "origin=Debian,codename=${distro_codename}-updates";
+  "origin=Debian,codename=${distro_codename},label=Debian";
+  "origin=Debian,codename=${distro_codename},label=Debian-Security";
+  "origin=Debian,codename=${distro_codename}-security,label=Debian-Security";
+};
+Unattended-Upgrade::Package-Blacklist {
+};
+Unattended-Upgrade::Mail "erkipolo@gmail.com";
+Unattended-Upgrade::MailReport "on-change";
+EOF
+
+tee /etc/apt/apt.conf.d/20auto-upgrades <<EOF
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "1";
+APT::Periodic::AutocleanInterval "7";
+APT::Periodic::Download-Upgradeable-Packages "1";
+EOF
+
+systemctl restart unattended-upgrades
+
+unattended-upgrade -d
+---------------------------------------------
+---------------------------------------------
+
+
+---------------------------------------------
+---------------------------------------------
+  CONFIGURAR ROTACION DE BITACORAS DE LAS
+          ACTUALIZACIONES AUTOMATICAS
+---------------------------------------------
+tee /etc/logrotate.d/unattended-upgrades <<EOF
+/var/log/unattended-upgrades/unattended-upgrades.log 
+/var/log/unattended-upgrades/unattended-upgrades-dpkg.log
+/var/log/unattended-upgrades/unattended-upgrades-shutdown.log
+{
+  daily
+  dateext
+  dateformat -%Y%m%d-%H%M%S
+  missingok
+  rotate 365
+  compress
+}
+EOF
+
+logrotate -vf /etc/logrotate.d/unattended-upgrades
+
+ls -lh /var/log/unattended-upgrades/unattended-upgrades.log
+---------------------------------------------
+---------------------------------------------

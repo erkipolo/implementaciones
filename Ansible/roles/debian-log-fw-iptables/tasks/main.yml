@@ -1,0 +1,27 @@
+- name: Bitacorizar conexiones entrantes
+  ansible.builtin.iptables:
+    table: filter
+    chain: INPUT
+    chain_management: true
+    state: present
+    action: append
+    log_prefix: "DROP FILTER INPUT: "
+    log_level: info
+    jump: LOG
+    comment: 'LOG'
+    ip_version: ipv4
+  notify: save_rules
+
+- name: Bitacorizar conexiones enrutadas establecidas y relacionadas
+  ansible.builtin.iptables:
+    table: filter
+    chain: FORWARD
+    chain_management: true
+    state: present
+    action: append
+    log_prefix: "DROP FILTER FORWARD: "
+    log_level: info
+    jump: LOG
+    comment: 'LOG'
+    ip_version: ipv4
+  notify: save_rules

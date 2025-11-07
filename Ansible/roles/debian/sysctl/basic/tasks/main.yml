@@ -1,0 +1,63 @@
+- name: Sysctl Basic Config 1
+  ansible.posix.sysctl:
+    name: net.ipv4.conf.default.rp_filter
+    value: 1
+    sysctl_set: true
+    state: present
+    reload: true
+
+- name: Sysctl Basic Config 2
+  ansible.posix.sysctl:
+    name: net.ipv4.conf.all.rp_filter
+    value: 1
+    sysctl_set: true
+    state: present
+    reload: true
+
+- name: Sysctl Basic Config 3
+  ansible.posix.sysctl:
+    name: net.ipv4.tcp_max_syn_backlog
+    value: 2048
+    sysctl_set: true
+    state: present
+    reload: true
+
+- name: Sysctl Basic Config 4
+  ansible.posix.sysctl:
+    name: net.ipv4.tcp_synack_retries
+    value: 2
+    sysctl_set: true
+    state: present
+    reload: true
+
+- name: Sysctl Basic Config 5
+  ansible.posix.sysctl:
+    name: net.ipv4.tcp_syn_retries
+    value: 5
+    sysctl_set: true
+    state: present
+    reload: true
+
+- name: Sysctl Basic Config 6
+  ansible.posix.sysctl:
+    name: net.ipv4.icmp_ignore_bogus_error_responses
+    value: 1
+    sysctl_set: true
+    state: present
+    reload: true
+
+- name: Sysctl Basic Config 7
+  ansible.posix.sysctl:
+    name: net.ipv4.tcp_syncookies
+    value: 1
+    sysctl_set: true
+    state: present
+    reload: true
+
+- name: Sysctl Basic Config 8
+  ansible.posix.sysctl:
+    name: net.ipv4.tcp_timestamps
+    value: 0
+    sysctl_set: true
+    state: present
+    reload: true

@@ -1,0 +1,6 @@
+- name: restart_bind9
+  ansible.builtin.systemd_service:
+    name: bind9
+    masked: no
+    enabled: true
+    state: restarted

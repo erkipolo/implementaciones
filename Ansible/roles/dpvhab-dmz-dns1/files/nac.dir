@@ -1,0 +1,21 @@
+$ORIGIN dpvhab.cu.
+$TTL 86400
+@  IN  SOA  dpvhab.cu. root.dpvhab.cu. (
+     2020040291    ; Serial
+           3600    ; Refresh
+            900    ; Retry
+        1209600    ; Expire
+          86400 )  ; Negative Cache TTL
+;
+@     IN    NS    ns2.dpvhab.cu.
+@     IN    MX    10 mx.dpvhab.cu.
+@     IN    A     190.6.67.4
+@     IN    TXT   "v=spf1 a mx a:mx.dpvhab.cu mx:mx.dpvhab.cu ip4:190.6.67.3/32 -all"
+;
+ns2   IN    A     190.6.67.2
+mx    IN    A     190.6.67.3
+none1 IN    A     190.6.67.4
+none2 IN    A     190.6.67.5
+none3 IN    A     190.6.67.6
+;
+;www   IN    CNAME none1

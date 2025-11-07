@@ -1,0 +1,67 @@
+---------------------------------------------
+---------------------------------------------
+  CONFIGURAR CORTAFUEGOS
+---------------------------------------------
+# Instalación del cortafuegos Ufw
+apt -yq install ufw
+
+# Configuración mínima recomendada
+ufw default deny incoming
+ufw default deny routed
+ufw default allow outgoing
+
+# Permitir el acceso al SSH (hazlo antes de habilitarlo)
+ufw limit in from 0.0.0.0/0 to any app 'OpenSSH' comment 'Allow SSH'
+
+# Habilitando el cortafuegos
+ufw enable
+
+# Mostrar las reglas implementadas
+ufw status verbose
+---------------------------------------------
+---------------------------------------------
+
+
+---------------------------------------------
+---------------------------------------------
+  CONFIGURAR LOG PARA CORTAFUEGOS (vps only)
+---------------------------------------------
+apt -yq install rsyslog
+
+ufw logging on
+ufw logging medium|full
+
+systemctl restart rsyslog
+
+systemctl reboot
+
+tail /var/log/ufw.log
+---------------------------------------------
+---------------------------------------------
+
+
+---------------------------------------------
+---------------------------------------------
+  CONFIGURAR ROTACION DE BITACORAS DE UFW
+---------------------------------------------
+tee /etc/logrotate.d/ufw <<EOF
+/var/log/ufw.log {
+  daily
+  dateext
+  dateformat -%Y%m%d-%H%M%S
+  missingok
+  rotate 365
+  compress
+  su root root
+  create 640 root adm
+  postrotate
+    [ -x /usr/lib/rsyslog/rsyslog-rotate ] && /usr/lib/rsyslog/rsyslog-rotate || true
+  endscript
+}
+EOF
+
+logrotate -vf /etc/logrotate.d/ufw
+
+ls -lh /var/log/ufw.log
+---------------------------------------------
+---------------------------------------------

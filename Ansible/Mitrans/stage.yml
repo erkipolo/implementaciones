@@ -1,0 +1,67 @@
+---
+- name: Actualizar los indices del repositorio y el sistema operativo
+  tags: upgrade
+  hosts: all
+  roles:
+    - debian/upgrade
+
+- name: Configuraciones de Control Basicas del Sistema
+  tags: sysctl-config
+  hosts: all
+  roles:
+    - debian/sysctl/basic
+
+- name: Habilitar el reenvio de paquetes
+  tags: forward-enabled
+  hosts: all
+  roles:
+    - debian/sysctl/forward
+
+- name: Crear un nuevo usuario con privilegios de sudo y acceso SSH por llave
+  tags: create-sudo-user
+  hosts: all
+  vars:
+    NORMAL_USER_NAME: 'sysadmin'
+    NORMAL_USER_PASS: '$6$1/g/rmFXEQeo.rBm$H5ab4JI3K5NbYyqp8PF9u9NipArTvygwbCqBrBvyU3fdxLo7K.dxHJSyowdawqmB.F.aPY28zYt0Q6RsZOCHM0'
+    NORMAL_USER_PUB_KEY: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILb4r5KUCCXyJthR8MUeTI9R2+9g6pBIDs45bkcVcn43 sysadmin'
+  roles:
+    - create-sudo-user
+
+- name: Habilitar Cortafuegos (ufw)
+  tags: ufw
+  hosts: all
+  roles:
+    - ufw
+
+- name: Habilitar Notificaciones via e-mail (postfix)
+  tags: sendonly-postfix
+  hosts: all
+  roles:
+    - sendonly-postfix
+
+- name: Habilitar autenticacion en el servidor de envio de e-mail (Requiere Habilitar Notificaciones via e-mail usando postfix [Opcional])
+  tags: sendonly-postfix-auth
+  hosts: all
+  vars:
+    FQDN_EMAIL_SERVER: 'smtp.gmail.com'
+  roles:
+    - sendonly-postfix-auth
+
+- name: Habilitar Notificaciones de Acceso al servicio SSH (Requiere Habilitar Notificaciones via e-mail usando postfix)
+  tags: notify-ssh-access
+  hosts: all
+  roles:
+    - notify-ssh-access
+
+- name: Habilitar HIPS con notificaciones via e-mail usando fail2ban (Requiere Habilitar Notificaciones via e-mail usando postfix)
+  tags: fail2ban
+  hosts: all
+  roles:
+    - fail2ban
+
+- name: Habilitar las actualizaciones automaticas con notificaciones via e-mail (Requiere Habilitar Notificaciones via e-mail usando postfix)
+  tags:  unattended-upgrades
+  hosts: all
+  roles:
+    - unattended-upgrades
+
