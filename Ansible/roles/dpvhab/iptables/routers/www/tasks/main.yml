@@ -1,0 +1,18 @@
+- name: Aceptando conexiones entrantes de SSH
+  ansible.builtin.iptables:
+    table: filter
+    chain: INPUT
+    chain_management: true
+    state: present
+    action: append
+    protocol: tcp
+    destination_port: 22
+    source: 190.6.78.53/32
+    ctstate: NEW
+    syn: match
+    limit: 2/second
+    limit_burst: 20
+    jump: ACCEPT
+    comment: 'SSH'
+    ip_version: ipv4
+  notify: save_rules

@@ -14,7 +14,6 @@ $TTL 86400
 ;
 ns1   IN  A   172.32.16.20
 mx    IN  A   172.32.16.20
-ha    IN  A   172.32.16.20
 ;
 smtp  IN  CNAME mx
 imap  IN  CNAME mx

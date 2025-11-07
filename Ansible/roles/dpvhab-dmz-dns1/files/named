@@ -2,7 +2,7 @@
 {
 	daily
 	dateext
-	dateformat -%Y%m%d%H%M
+	dateformat -%Y%m%d-%H%M%S
 	missingok
 	rotate 365
 	compress

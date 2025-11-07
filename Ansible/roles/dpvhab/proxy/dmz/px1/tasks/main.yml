@@ -1,0 +1,8 @@
+- name: Acceptar redes locales
+  ansible.builtin.copy:
+    src: "99-localnet.conf"
+    dest: /etc/squid/conf.d/99-localnet.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart_squid

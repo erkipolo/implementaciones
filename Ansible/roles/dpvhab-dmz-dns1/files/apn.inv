@@ -12,4 +12,3 @@ $TTL  86400
 ;
 20  IN  PTR   ns1.dpvhab.cu.
 20  IN  PTR   mx.dpvhab.cu.
-20  IN  PTR   ha.dpvhab.cu.

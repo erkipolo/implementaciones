@@ -123,6 +123,11 @@ Destroy the plan
 
 terraform destroy
 
+Destroy part of config
+
+terraform destroy -target="proxmox_lxc.r3"
+
 Exec part of config
 
-terraform apply -target='proxmox_lxc.DOCKER_HOST'
+terraform apply -target='proxmox_lxc.r3'
+

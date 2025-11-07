@@ -27,6 +27,7 @@ resource "proxmox_lxc" "r1" {
     firewall = true
     ip       = "192.168.26.2/30"
     name     = "eth1"
+    tag      = 1000
   }
   rootfs {
     size    = "5G"
@@ -57,6 +58,7 @@ resource "proxmox_lxc" "r2" {
     ip       = "192.168.245.166/30"
     gw       = "192.168.245.165"
     name     = "eth0"
+    tag      = 1001
   }
   network {
     bridge   = "vmbr4"
@@ -93,6 +95,7 @@ resource "proxmox_lxc" "r3" {
     ip       = "192.168.180.214/30"
     gw       = "192.168.180.213"
     name     = "eth0"
+    tag      = 1002
   }
   network {
     bridge   = "vmbr3"
@@ -322,9 +325,9 @@ resource "proxmox_lxc" "mx1" {
   }
 }
 
-resource "proxmox_lxc" "proxy" {
+resource "proxmox_lxc" "px1" {
   cores           = 1
-  hostname        = "proxy"
+  hostname        = "px1"
   memory          = 1024
   nameserver      = "192.168.40.10"
   onboot          = true
@@ -351,36 +354,6 @@ resource "proxmox_lxc" "proxy" {
     firewall = true
     ip       = "10.16.50.20/17"
     name     = "eth1"
-  }
-  rootfs {
-    size    = "5G"
-    storage = "local-lvm"
-  }
-}
-
-resource "proxmox_lxc" "mail" {
-  cores           = 1
-  hostname        = "mail"
-  memory          = 1024
-  nameserver      = "192.168.40.10"
-  onboot          = true
-  ostemplate      = "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
-  ssh_public_keys = var.ct_ssh_public_key
-  searchdomain    = "dpvhab.cu"
-  start           = true
-  swap            = 1024
-  target_node     = "node01"
-  unprivileged    = true
-  vmid            = 401
-  features {
-    nesting = true
-  }
-  network {
-    bridge   = "vmbr2"
-    firewall = true
-    ip       = "10.16.50.21/17"
-    gw       = "10.16.50.20"
-    name     = "eth0"
   }
   rootfs {
     size    = "5G"

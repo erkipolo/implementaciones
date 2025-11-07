@@ -1,0 +1,22 @@
+- name: Instalando Squid
+  ansible.builtin.apt:
+    name: squid
+    state: latest
+
+- name: Copiar configuracion principal con acceso a los proxmoxs
+  ansible.builtin.copy:
+    src: "squid.conf"
+    dest: /etc/squid/squid.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart_squid
+
+- name: Copiar configuracion de rotacion de bitacoras
+  ansible.builtin.copy:
+    src: "squid"
+    dest: /etc/logrotate.d/squid
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart_squid

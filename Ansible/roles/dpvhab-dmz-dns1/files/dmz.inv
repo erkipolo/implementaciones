@@ -18,6 +18,6 @@ $TTL  86400
 12  IN  PTR   mx.dpvhab.cu.
 20  IN  PTR   repo.dpvhab.cu.
 ;
-30  IN  PTR   proxy.dpvhab.cu.
+30  IN  PTR   px1.dpvhab.cu.
 ;
 250 IN  PTR   node01.dpvhab.cu.

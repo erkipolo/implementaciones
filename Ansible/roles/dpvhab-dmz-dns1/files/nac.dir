@@ -14,8 +14,8 @@ $TTL 86400
 ;
 ns2   IN    A     190.6.67.2
 mx    IN    A     190.6.67.3
-ha    IN    A     190.6.67.4
-none1 IN    A     190.6.67.5
-none2 IN    A     190.6.67.6
+none1 IN    A     190.6.67.4
+none2 IN    A     190.6.67.5
+none3 IN    A     190.6.67.6
 ;
-www   IN    CNAME ha
+;www   IN    CNAME none1
