@@ -1,0 +1,28 @@
+all:
+  children:
+    mitrans:
+      hosts:
+        nodo00:
+          ansible_host: 172.30.0.19
+        nodo01:
+          ansible_host: 172.30.0.18
+        salva:
+          ansible_host: 172.30.0.20
+        apolo:
+          ansible_host: 172.30.0.23
+        artemisa:
+          ansible_host: 172.30.0.27
+    dpvhab:
+      hosts:
+        node01:
+          ansible_host: 192.168.40.250
+    pve:
+      hosts:
+        nodo00:
+        nodo01:
+        apolo:
+        artemisa:
+        node01:
+    pbs:
+      hosts:
+        salva:

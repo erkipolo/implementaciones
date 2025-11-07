@@ -1,0 +1,55 @@
+- name: Delete configuration files
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /etc/apt/sources.list.d/ceph.list
+    - /etc/apt/sources.list.d/pve-enterprise.list
+
+- name: Copy template of APT config file
+  ansible.builtin.template:
+    src: apt.conf.j2
+    dest: /etc/apt/apt.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Copy template of sources.list config file
+  ansible.builtin.template:
+    src: sources.list.j2
+    dest: /etc/apt/sources.list
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Copy template of ceph.sources config file
+  ansible.builtin.template:
+    src: ceph.sources.j2
+    dest: /etc/apt/sources.list.d/ceph.sources
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Copy template of debian.sources config file
+  ansible.builtin.template:
+    src: debian.sources.j2
+    dest: /etc/apt/sources.list.d/debian.sources
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Copy template of proxmox.sources config file
+  ansible.builtin.template:
+    src: proxmox.sources.j2
+    dest: /etc/apt/sources.list.d/proxmox.sources
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Copy template of pve-enterprise.sources config file
+  ansible.builtin.template:
+    src: pve-enterprise.sources.j2
+    dest: /etc/apt/sources.list.d/pve-enterprise.sources
+    owner: root
+    group: root
+    mode: '0644'

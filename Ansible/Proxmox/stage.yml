@@ -1,0 +1,26 @@
+---
+# Generals
+
+- name: Configurar repositorio dpvhab
+  tags: dpvhab-repo-pve
+  hosts:
+    - node01
+  roles:
+    - dpvhab/repo/pve
+
+- name: Configurar repositorio mitrans
+  tags: dpvhab-repo-pve
+  hosts:
+    - node00
+#    - nodo01
+    - apolo
+    - artemisa
+  roles:
+    - mitrans/repo/pve
+
+- name: Actualizar los indices del repositorio y el sistema operativo
+  tags: debian-upgrade
+  hosts:
+    - all
+  roles:
+    - debian/upgrade
