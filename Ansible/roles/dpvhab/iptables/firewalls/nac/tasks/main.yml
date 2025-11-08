@@ -73,6 +73,22 @@
     ip_version: ipv4
   notify: save_rules
 
+- name: Aceptando conexiones enrutadas de DNS
+  ansible.builtin.iptables:
+    chain: FORWARD
+    chain_management: true
+    state: present
+    action: append
+    protocol: udp
+    destination_port: 53
+    source: 192.168.40.10/32
+    destination: 0.0.0.0/0
+    ctstate: NEW
+    jump: ACCEPT
+    comment: 'DNS'
+    ip_version: ipv4
+  notify: save_rules
+
 - name: Aceptando conexiones enrutadas de SSH
   ansible.builtin.iptables:
     table: filter
@@ -119,8 +135,8 @@
     state: present
     action: append
     protocol: icmp
-    source: 192.168.40.20/32
-    destination: 190.6.67.1/32
+    source: 0.0.0.0/0
+    destination: 0.0.0.0/0
     to_source: 190.6.67.2
     ctstate: NEW
     jump: SNAT

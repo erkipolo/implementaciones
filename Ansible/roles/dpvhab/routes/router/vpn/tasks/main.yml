@@ -4,23 +4,5 @@
     line: "{{ item }}"
     state: present
   with_items:
-    - 'up ip -4 route add 172.32.1.0/24 via 192.168.26.1'
-    - 'up ip -4 route add 172.32.2.0/24 via 192.168.26.1'
-    - 'up ip -4 route add 172.32.3.0/24 via 192.168.26.1'
-    - 'up ip -4 route add 172.32.4.0/24 via 192.168.26.1'
-    - 'up ip -4 route add 172.32.5.0/24 via 192.168.26.1'
-    - 'up ip -4 route add 172.32.6.0/24 via 192.168.26.1'
-    - 'up ip -4 route add 172.32.7.0/24 via 192.168.26.1'
-    - 'up ip -4 route add 172.32.8.0/24 via 192.168.26.1'
-    - 'up ip -4 route add 172.32.9.0/24 via 192.168.26.1'
-    - 'up ip -4 route add 172.32.10.0/24 via 192.168.26.1'
-    - 'up ip -4 route add 172.32.11.0/24 via 192.168.26.1'
-    - 'up ip -4 route add 172.32.12.0/24 via 192.168.26.1'
-    - 'up ip -4 route add 172.32.13.0/24 via 192.168.26.1'
-    - 'up ip -4 route add 172.32.14.0/24 via 192.168.26.1'
-    - 'up ip -4 route add 172.32.15.0/24 via 192.168.26.1'
-    - 'up ip -4 route add 172.32.17.0/24 via 192.168.26.1'
-    - 'up ip -4 route add 172.32.18.0/24 via 192.168.26.1'
-    - 'up ip -4 route add 172.32.19.0/24 via 192.168.26.1'
     - 'up ip -4 route add 172.32.20.0/24 via 192.168.26.1'
   notify: restart_systemd_networkd

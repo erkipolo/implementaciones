@@ -16,24 +16,16 @@
 - name: Eliminando el SMTP por defecto
   tags: debian-ct-smtp-remove
   hosts:
-    - ns1
-    - px1
+#    - ns1
+#    - px1
     - firewalls
   roles:
     - debian/ct/smtp/remove
 
-- name: Configuraciones de Control Basicas del Sistema
-  tags: debian-sysctl-basic
-  hosts:
-    - dmz
-    - firewalls
-  roles:
-    - debian/sysctl/basic
-
 - name: Configurar repositorio dpvhab
   tags: dpvhab-repo-dmz
   hosts:
-    - dmz
+#    - dmz
     - firewalls
   roles:
     - dpvhab/repo/dmz
@@ -41,7 +33,7 @@
 - name: Actualizar los indices del repositorio y el sistema operativo
   tags: debian-upgrade
   hosts:
-    - dmz
+ #   - dmz
     - firewalls
   roles:
     - debian/upgrade
@@ -49,64 +41,85 @@
 - name: Habilitar Cortafuegos (iptables)
   tags: debian-iptables-init-ssh-policy
   hosts:
-    - dmz
+#    - dmz
     - firewalls
   roles:
     - debian/iptables/init
     - dpvhab/iptables/dmz/ssh
     - debian/iptables/policy/hosts
 
+- name: Configurar rutas estaticas de la DMZ
+  tags: dpvhab-routes-firewalls-dmz
+  hosts:
+    - fw1
+  roles:
+    - dpvhab/routes/firewalls/vpn
+
+- name: Configurar rutas estaticas de la WWW
+  tags: dpvhab-routes-firewalls-www
+  hosts:
+    - fw2
+  roles:
+    - dpvhab/routes/firewalls/www
+
+- name: Configurar rutas estaticas de la NAC
+  tags: dpvhab-routes-firewalls-nac
+  hosts:
+    - fw3
+  roles:
+    - dpvhab/routes/firewalls/nac
+
 # DMZ Servers
 
-- name: Configurar rutas estaticas de la DMZ
-  tags: dpvhab-routes-dmz
-  hosts:
-    - dmz
-  roles:
-    - dpvhab/routes/dmz
+#- name: Configurar rutas estaticas de la DMZ
+#  tags: dpvhab-routes-dmz
+#  hosts:
+#    - dmz
+#  roles:
+#    - dpvhab/routes/dmz
 
-- name: DNS con vistas
-  tags: dpvhab-dmz-dns1
-  hosts:
-    - ns1
-  roles:
-    - dpvhab-dmz-dns1
+#- name: DNS con vistas
+#  tags: dpvhab-dmz-dns1
+#  hosts:
+#    - ns1
+#  roles:
+#    - dpvhab-dmz-dns1
 
-- name: Habilitar Cortafuegos DNS (iptables)
-  tags: dpvhab-iptables-dmz-ns1
-  hosts:
-    - ns1
-  roles:
-    - dpvhab/iptables/dmz/ns1
+#- name: Habilitar Cortafuegos DNS (iptables)
+#  tags: dpvhab-iptables-dmz-ns1
+#  hosts:
+#    - ns1
+#  roles:
+#    - dpvhab/iptables/dmz/ns1
 
-- name: SMTP Relay
-  tags: dpvhab-dmz-mx1
-  hosts:
-    - mx1
-  roles:
-    - dpvhab-dmz-mx1
+#- name: SMTP Relay
+#  tags: dpvhab-dmz-mx1
+#  hosts:
+#    - mx1
+#  roles:
+#    - dpvhab-dmz-mx1
 
-- name: Habilitar Cortafuegos SMTP (iptables)
-  tags: dpvhab-iptables-dmz-mx1
-  hosts:
-    - mx1
-  roles:
-    - dpvhab/iptables/dmz/mx1
+#- name: Habilitar Cortafuegos SMTP (iptables)
+#  tags: dpvhab-iptables-dmz-mx1
+#  hosts:
+#    - mx1
+#  roles:
+#    - dpvhab/iptables/dmz/mx1
 
-- name: PROXY DMZ
-  tags: dpvhab-proxy-dmz-px1
-  hosts:
-    - px1
-  roles:
-    - debian/proxy
-    - dpvhab/proxy/dmz/px1
+#- name: PROXY DMZ
+#  tags: dpvhab-proxy-dmz-px1
+#  hosts:
+#    - px1
+#  roles:
+#    - debian/proxy
+#    - dpvhab/proxy/dmz/px1
 
-- name: Habilitar Cortafuegos PROXY (iptables)
-  tags: dpvhab-iptables-dmz-px1
-  hosts:
-    - px1
-  roles:
-    - dpvhab/iptables/dmz/px1
+#- name: Habilitar Cortafuegos PROXY (iptables)
+#  tags: dpvhab-iptables-dmz-px1
+#  hosts:
+#    - px1
+#  roles:
+#    - dpvhab/iptables/dmz/px1
 
 # Firewalls
 
@@ -153,13 +166,6 @@
     - r1
   roles:
     - dpvhab/routes/router/vpn
-
-- name: Configuraciones de Control Basicas del Sistema
-  tags: debian-sysctl-basic
-  hosts:
-    - routers
-  roles:
-    - debian/sysctl/basic
 
 - name: Habilitar el reenvio de paquetes del router VPN
   tags: debian-sysctl-forward

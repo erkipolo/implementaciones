@@ -130,13 +130,13 @@ resource "proxmox_lxc" "fw1" {
     bridge   = "vmbr5"
     firewall = true
     ip       = "172.32.16.20/24"
-    gw       = "172.32.16.1"
     name     = "eth0"
   }
   network {
     bridge   = "vmbr0"
     firewall = true
     ip       = "192.168.40.3/24"
+    gw       = "192.168.40.1"
     name     = "eth1"
   }
   rootfs {

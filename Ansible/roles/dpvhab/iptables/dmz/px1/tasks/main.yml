@@ -6,7 +6,7 @@
     state: present
     action: append
     protocol: tcp
-    destination_port: 25
+    destination_port: 3128
     source: 10.16.0.0/17
     ctstate: NEW
     jump: ACCEPT
