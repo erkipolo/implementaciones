@@ -1,5 +1,47 @@
-- name: Aceptando conexiones enrutadas de SSH
+# REDIRECT DNS FROM Vpn TO Dmz
+
+- name: DNAT PREROUTING DNS IPv4
   ansible.builtin.iptables:
+    table: nat
+    chain: PREROUTING
+    chain_management: true
+    state: present
+    action: append
+    protocol: udp
+    destination_port: 53
+    source: 0.0.0.0/0
+    destination: 0.0.0.0/0
+    to_destination: 192.168.40.10
+    ctstate: NEW
+    jump: DNAT
+    comment: 'DNS'
+    ip_version: ipv4
+  notify: save_rules
+
+# ACCEPT FORWARD DNS FROM Vpn TO Dmz
+
+- name: ACCEPT FORWARD DNS IPv4
+  ansible.builtin.iptables:
+    table: filter
+    chain: FORWARD
+    chain_management: true
+    state: present
+    action: append
+    protocol: udp
+    destination_port: 53
+    source: 0.0.0.0/0
+    destination: 192.168.40.10/32
+    ctstate: NEW
+    jump: ACCEPT
+    comment: 'DNS'
+    ip_version: ipv4
+  notify: save_rules
+
+# ACCEPT FORWARD SSH FROM Dmz TO Router
+
+- name: ACCEPT FORWARD LIMIT SSH IPv4
+  ansible.builtin.iptables:
+    table: filter
     chain: FORWARD
     chain_management: true
     state: present
@@ -17,8 +59,11 @@
     ip_version: ipv4
   notify: save_rules
 
-- name: Aceptando conexiones enrutadas de REPO
+# ACCEPT FORWARD REPO FROM Router TO Dmz
+
+- name: ACCEPT FORWARD HTTP (REPO) IPv4
   ansible.builtin.iptables:
+    table: filter
     chain: FORWARD
     chain_management: true
     state: present
@@ -31,40 +76,6 @@
     syn: match
     jump: ACCEPT
     comment: 'REPO'
-    ip_version: ipv4
-  notify: save_rules
-
-- name: Aceptando conexiones enrutadas de DNS
-  ansible.builtin.iptables:
-    table: nat
-    chain: PREROUTING
-    chain_management: true
-    state: present
-    action: append
-    protocol: udp
-    destination_port: 53
-    source: 0.0.0.0/0
-    destination: 172.32.16.20/32
-    to_destination: 192.168.40.10
-    ctstate: NEW
-    jump: DNAT
-    comment: 'DNS'
-    ip_version: ipv4
-  notify: save_rules
-
-- name: Aceptando conexiones enrutadas de DNS
-  ansible.builtin.iptables:
-    chain: FORWARD
-    chain_management: true
-    state: present
-    action: append
-    protocol: udp
-    destination_port: 53
-    source: 0.0.0.0/0
-    destination: 192.168.40.10/32
-    ctstate: NEW
-    jump: ACCEPT
-    comment: 'DNS'
     ip_version: ipv4
   notify: save_rules
 

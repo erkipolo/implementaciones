@@ -1,4 +1,4 @@
-- name: Habilitar el reenvio de paquetes IPv4
+- name: Sysctl Enable forward IPv4
   ansible.posix.sysctl:
     name: net.ipv4.ip_forward
     value: '1'
@@ -6,7 +6,7 @@
     state: present
     reload: true
 
-- name: Habilitar el reenvio de paquetes IPv6
+- name: Sysctl Enable forward IPv6
   ansible.posix.sysctl:
     name: net.ipv6.conf.all.forwarding
     value: '1'

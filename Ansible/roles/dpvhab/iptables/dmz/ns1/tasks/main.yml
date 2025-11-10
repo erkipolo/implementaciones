@@ -1,4 +1,4 @@
-- name: Aceptando conexiones entrantes de DNS
+- name: ACCEPT INPUT DNS IPv4
   ansible.builtin.iptables:
     table: filter
     chain: INPUT

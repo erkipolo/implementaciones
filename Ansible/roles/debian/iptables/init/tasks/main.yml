@@ -1,9 +1,11 @@
-- name: Instalando iptables
+- name: Install iptables
   ansible.builtin.apt:
     name: iptables-persistent
     state: latest
 
-- name: Aceptando conexiones entrantes establecidas y relacionadas
+# INPUT
+
+- name: ACCEPT INPUT ESTABLISHED,RELATED
   ansible.builtin.iptables:
     table: filter
     chain: INPUT
@@ -16,7 +18,7 @@
     ip_version: both
   notify: save_rules
 
-- name: Aceptando conexiones entrantes de la loopback
+- name: ACCEPT INPUT loopback
   ansible.builtin.iptables:
     table: filter
     chain: INPUT
@@ -29,7 +31,7 @@
     ip_version: both
   notify: save_rules
 
-- name: Aceptando conexiones entrantes de PING IPv4
+- name: ACCEPT INPUT PING IPv4
   ansible.builtin.iptables:
     table: filter
     chain: INPUT
@@ -42,7 +44,9 @@
     ip_version: ipv4
   notify: save_rules
 
-- name: Aceptando conexiones enrutadas establecidas y relacionadas
+# FORWARD
+
+- name: ACCEPT FORWARD ESTABLISHED,RELATED
   ansible.builtin.iptables:
     table: filter
     chain: FORWARD
@@ -55,7 +59,7 @@
     ip_version: both
   notify: save_rules
 
-- name: Aceptando conexiones enrutadas de PING
+- name: ACCEPT FORWARD PING IPv4
   ansible.builtin.iptables:
     table: filter
     chain: FORWARD

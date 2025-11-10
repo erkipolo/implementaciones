@@ -1,4 +1,4 @@
-- name: Aceptando conexiones entrantes de PROXY
+- name: ACCEPT INPUT PROXY IPv4
   ansible.builtin.iptables:
     table: filter
     chain: INPUT
@@ -7,7 +7,7 @@
     action: append
     protocol: tcp
     destination_port: 3128
-    source: 10.16.0.0/17
+    source: 0.0.0.0/0
     ctstate: NEW
     jump: ACCEPT
     comment: 'PROXY'

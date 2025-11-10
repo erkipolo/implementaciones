@@ -1,0 +1,17 @@
+options {
+  directory "/var/cache/bind";
+  forwarders { 8.8.8.8; };
+  recursion yes;
+  auth-nxdomain no;
+  listen-on-v6 { any; };
+  dnssec-validation no;
+  version "";
+  rate-limit {
+    ipv4-prefix-length 32;
+    window 10;
+    responses-per-second 25;
+    errors-per-second 5;
+    nxdomains-per-second 5;
+    slip 2;
+  };
+};

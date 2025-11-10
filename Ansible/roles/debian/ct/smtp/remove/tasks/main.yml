@@ -1,4 +1,4 @@
-- name: Desinstalando postfix
+- name: Uninstall postfix
   ansible.builtin.apt:
     name: postfix
     state: absent

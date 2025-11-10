@@ -1,8 +1,0 @@
-zone "dpvhab.cu" {
-  type master;
-  file "apn.dir";
-};
-zone "16.32.172.in-addr.arpa" {
-  type master;
-  file "apn.inv";
-};

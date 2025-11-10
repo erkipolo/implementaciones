@@ -1,4 +1,4 @@
-- name: Definir politica por defecto para el trafico entrante
+- name: DEFAULT DROP INPUT POLICY
   ansible.builtin.iptables:
     table: filter
     chain: INPUT
@@ -10,7 +10,7 @@
     ip_version: both
   notify: save_rules
 
-- name: Definir politica por defecto para el trafico enrutado
+- name: DEFAULT ACCEPT FORWARD POLICY
   ansible.builtin.iptables:
     table: filter
     chain: FORWARD
@@ -22,7 +22,7 @@
     ip_version: both
   notify: save_rules
 
-- name: Definir politica por defecto para el trafico saliente
+- name: DEFAULT ACCEPT OUTPUT POLICY
   ansible.builtin.iptables:
     table: filter
     chain: OUTPUT

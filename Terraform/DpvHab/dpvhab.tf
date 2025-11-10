@@ -338,7 +338,7 @@ resource "proxmox_lxc" "px1" {
   swap            = 1024
   target_node     = "node01"
   unprivileged    = true
-  vmid            = 400
+  vmid            = 314
   features {
     nesting = true
   }

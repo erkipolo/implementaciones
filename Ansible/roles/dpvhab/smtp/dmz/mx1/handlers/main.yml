@@ -1,0 +1,6 @@
+- name: restart_postfix
+  ansible.builtin.systemd_service:
+    name: postfix
+    masked: no
+    enabled: true
+    state: restarted

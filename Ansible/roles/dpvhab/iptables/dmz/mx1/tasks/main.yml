@@ -1,4 +1,4 @@
-- name: Aceptando conexiones entrantes de SMTP
+- name: ACCEPT INPUT SMTP IPv4
   ansible.builtin.iptables:
     table: filter
     chain: INPUT

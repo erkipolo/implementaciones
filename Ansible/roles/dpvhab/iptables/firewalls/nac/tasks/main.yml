@@ -1,25 +1,6 @@
-# PREROUTING
+# REDIRECT DNS FROM Nacional TO Dmz
 
-- name: Aceptando conexiones enrutadas de REPO
-  ansible.builtin.iptables:
-    table: nat
-    chain: PREROUTING
-    chain_management: true
-    state: present
-    action: append
-    protocol: tcp
-    destination_port: 80
-    source: 190.6.67.1/32
-    destination: 190.6.67.4/32
-    to_destination: 192.168.40.20
-    ctstate: NEW
-    syn: match
-    jump: DNAT
-    comment: 'REPO'
-    ip_version: ipv4
-  notify: save_rules
-
-- name: Aceptando conexiones enrutadas de DNS
+- name: DNAT PREROUTING DNS IPv4
   ansible.builtin.iptables:
     table: nat
     chain: PREROUTING
@@ -37,28 +18,11 @@
     ip_version: ipv4
   notify: save_rules
 
-# FORWARD
+# ACCEPT FORWARD DNS FROM Internet TO Dmz
 
-- name: Aceptando conexiones enrutadas de REPO
+- name: ACCEPT FORWARD DNS IPv4
   ansible.builtin.iptables:
     table: filter
-    chain: FORWARD
-    chain_management: true
-    state: present
-    action: append
-    protocol: tcp
-    destination_port: 80
-    source: 190.6.67.1/32
-    destination: 192.168.40.20/32
-    ctstate: NEW
-    syn: match
-    jump: ACCEPT
-    comment: 'REPO'
-    ip_version: ipv4
-  notify: save_rules
-
-- name: Aceptando conexiones enrutadas de DNS
-  ansible.builtin.iptables:
     chain: FORWARD
     chain_management: true
     state: present
@@ -73,23 +37,9 @@
     ip_version: ipv4
   notify: save_rules
 
-- name: Aceptando conexiones enrutadas de DNS
-  ansible.builtin.iptables:
-    chain: FORWARD
-    chain_management: true
-    state: present
-    action: append
-    protocol: udp
-    destination_port: 53
-    source: 192.168.40.10/32
-    destination: 0.0.0.0/0
-    ctstate: NEW
-    jump: ACCEPT
-    comment: 'DNS'
-    ip_version: ipv4
-  notify: save_rules
+# ACCEPT FORWARD SSH FROM Dmz TO Router
 
-- name: Aceptando conexiones enrutadas de SSH
+- name: ACCEPT FORWARD LIMIT SSH IPv4
   ansible.builtin.iptables:
     table: filter
     chain: FORWARD
@@ -109,8 +59,71 @@
     ip_version: ipv4
   notify: save_rules
 
-- name: Aceptando conexiones enrutadas de PROXY
+# REDIRECT HTTP (REPO) FROM Router TO fw
+
+- name: DNAT PREROUTING HTTP (REPO) IPv4
   ansible.builtin.iptables:
+    table: nat
+    chain: PREROUTING
+    chain_management: true
+    state: present
+    action: append
+    protocol: tcp
+    destination_port: 80
+    source: 190.6.67.1/32
+    destination: 190.6.67.4/32
+    to_destination: 192.168.40.20
+    ctstate: NEW
+    syn: match
+    jump: DNAT
+    comment: 'REPO'
+    ip_version: ipv4
+  notify: save_rules
+
+# ACCEPT FORWARD HTTP (REPO) FROM Router TO Dmz
+
+- name: ACCEPT FORWARD HTTP (REPO) IPv4
+  ansible.builtin.iptables:
+    table: filter
+    chain: FORWARD
+    chain_management: true
+    state: present
+    action: append
+    protocol: tcp
+    destination_port: 80
+    source: 190.6.67.1/32
+    destination: 192.168.40.20/32
+    ctstate: NEW
+    syn: match
+    jump: ACCEPT
+    comment: 'REPO'
+    ip_version: ipv4
+  notify: save_rules
+
+# ACCEPT FORWARD DNS FROM dmz TO Internet
+
+- name: ACCEPT FORWARD DNS IPv4
+  ansible.builtin.iptables:
+    table: filter
+    chain: FORWARD
+    chain_management: true
+    state: present
+    action: append
+    protocol: udp
+    destination_port: 53
+    source: 192.168.40.10/32
+    destination: 0.0.0.0/0
+    ctstate: NEW
+    jump: ACCEPT
+    comment: 'DNS'
+    ip_version: ipv4
+  notify: save_rules
+
+# ACCEPT FORWARD PROXY FROM dmz TO Internet
+
+- name: ACCEPT FORWARD PROXY IPv4
+  ansible.builtin.iptables:
+    table: filter
     chain: FORWARD
     chain_management: true
     state: present
@@ -125,9 +138,9 @@
     ip_version: ipv4
   notify: save_rules
 
-# POSTROUTING
+# MASQUERADE PING FROM Dmz TO Internet
 
-- name: Enmascarando conexiones salientes de PING
+- name: SNAT POSTROUTING PING IPv4
   ansible.builtin.iptables:
     table: nat
     chain: POSTROUTING
@@ -144,7 +157,9 @@
     ip_version: ipv4
   notify: save_rules
 
-- name: Enmascarando conexiones salientes de SSH
+# MASQUERADE SSH FROM Dmz TO Router
+
+- name: SNAT POSTROUTING SSH IPv4
   ansible.builtin.iptables:
     table: nat
     chain: POSTROUTING
@@ -163,7 +178,9 @@
     ip_version: ipv4
   notify: save_rules
 
-- name: Enmascarando conexiones salientes de DNS
+# MASQUERADE DNS FROM Dmz TO Internet
+
+- name: SNAT POSTROUTING DNS IPv4
   ansible.builtin.iptables:
     table: nat
     chain: POSTROUTING
@@ -171,6 +188,7 @@
     state: present
     action: append
     protocol: udp
+    destination_port: 53
     source: 192.168.40.10/32
     destination: 0.0.0.0/0
     to_source: 190.6.67.2
@@ -180,7 +198,9 @@
     ip_version: ipv4
   notify: save_rules
 
-- name: Enmascarando conexiones salientes de PROXY
+# MASQUERADE PROXY FROM Dmz TO Internet
+
+- name: SNAT POSTROUTING PROXY IPv4
   ansible.builtin.iptables:
     table: nat
     chain: POSTROUTING
@@ -198,4 +218,3 @@
     comment: 'PROXY'
     ip_version: ipv4
   notify: save_rules
-
