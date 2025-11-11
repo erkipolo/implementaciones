@@ -10,7 +10,7 @@ ROUTE:
 
 Server:
 
-vmbr0 - 192.168.40.249 - enp2s0
-vmbr1 -                - enp3s0 - Vlan Aware
-vmbr0 -                - enp4s0
+vmbr0 - 192.168.40.30 - enp2s0
+vmbr1 -               - enp3s0 - Vlan Aware
+vmbr0 -               - enp4s0
 

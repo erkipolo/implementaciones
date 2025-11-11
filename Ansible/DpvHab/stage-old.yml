@@ -1,0 +1,200 @@
+---
+# Estructura Basica:
+#   a) Rutas Estaticas
+#   b) Sysctl basic
+#   c) Sysctl Forward
+#   d) Clean CT
+#   e) Repositorio
+#   f) Actualizar
+#   g) FW General
+#   h) Servicio General
+#   i) Servicio Especifico
+#   j) FW Servicio
+
+# Generals
+
+- name: STATIC ROUTES DMZ HOSTS
+  tags: dpvhab-routes-dmz
+  hosts:
+    - dmz
+  roles:
+    - dpvhab/routes/dmz
+
+- name: STATIC ROUTES FW VPN
+  tags: dpvhab-routes-firewalls-vpn
+  hosts:
+    - fw1
+  roles:
+    - dpvhab/routes/firewalls/vpn
+
+- name: STATIC ROUTES FW WWW
+  tags: dpvhab-routes-firewalls-www
+  hosts:
+    - fw2
+  roles:
+    - dpvhab/routes/firewalls/www
+
+- name: STATIC ROUTES FW NAC
+  tags: dpvhab-routes-firewalls-nac
+  hosts:
+    - fw3
+  roles:
+    - dpvhab/routes/firewalls/nac
+
+- name: ENABLE FORWARD
+  tags: debian-sysctl-forward
+  hosts:
+    - firewalls
+  roles:
+    - debian/sysctl/forward
+
+- name: UNINSTALL SMTP
+  tags: debian-ct-smtp-remove
+  hosts:
+    - ns1
+    - px1
+    - repo
+    - firewalls
+  roles:
+    - debian/ct/smtp/remove
+
+- name: GENERAL INSTALL AND CONFIG DMZ
+  tags: general-dmz
+  hosts:
+    - dmz
+    - firewalls
+  roles:
+    - debian/sysctl/basic
+    - dpvhab/repo/dmz
+    - debian/upgrade
+    - debian/iptables/init
+    - dpvhab/iptables/ssh/hosts/dmz
+    - debian/iptables/policy/hosts
+
+- name: ADD RULES FW VPN
+  tags: dpvhab-iptables-firewalls-vpn
+  hosts:
+    - fw1
+  roles:
+    - dpvhab/iptables/firewalls/vpn
+
+- name: ADD RULES FW WWW
+  tags: dpvhab-iptables-firewalls-www
+  hosts:
+    - fw2
+  roles:
+    - dpvhab/iptables/firewalls/www
+
+- name: ADD RULES FW NAC
+  tags: dpvhab-iptables-firewalls-nac
+  hosts:
+    - fw3
+  roles:
+    - dpvhab/iptables/firewalls/nac
+
+# Routers
+
+- name: STATIC ROUTES ROUTER VPN
+  tags: dpvhab-routes-router-vpn
+  hosts:
+    - r1
+  roles:
+    - dpvhab/routes/router/vpn
+
+- name: BASIC SYSTEM CONTROL and ENABLE FORWARD and UNINSTALL SMTP
+  tags: general-routers
+  hosts:
+    - routers
+  roles:
+    - debian/sysctl/basic
+    - debian/sysctl/forward
+    - debian/ct/smtp/remove
+
+- name: CONFIG REPOSITORIES DMZ
+  tags: dpvhab-repo-dmz
+  hosts:
+    - r1
+  roles:
+    - dpvhab/repo/dmz
+
+- name: CONFIG REPOSITORIES WWW
+  tags: dpvhab-repo-www
+  hosts:
+    - r2
+  roles:
+    - dpvhab/repo/www
+
+- name: CONFIG REPOSITORIES NAC
+  tags: dpvhab-repo-nac
+  hosts:
+    - r3
+  roles:
+    - dpvhab/repo/nac
+
+- name: UPDATE AND UPGRADE REPOSITORIES
+  tags: debian-upgrade
+  hosts:
+    - routers
+  roles:
+    - debian/upgrade
+
+- name: INSTALL FW ON ROUTERS VPN
+  tags: dpvhab-iptables-routers-vpn
+  hosts:
+    - r1
+  roles:
+    - debian/iptables/init
+    - dpvhab/iptables/ssh/routers/vpn
+    - debian/iptables/policy/routers
+
+- name: INSTALL FW ON ROUTERS WWW
+  tags: dpvhab-iptables-routers-www
+  hosts:
+    - r2
+  roles:
+    - debian/iptables/init
+    - dpvhab/iptables/ssh/routers/www
+    - debian/iptables/policy/routers
+
+- name: INSTALL FW ON ROUTERS NAC
+  tags: dpvhab-iptables-routers-nac
+  hosts:
+    - r3
+  roles:
+    - debian/iptables/init
+    - dpvhab/iptables/ssh/routers/nac
+    - debian/iptables/policy/routers
+
+# Servers
+
+- name: INSTALL DNS DMZ (vistas)
+  tags: dpvhab-dns-dmz-ns1
+  hosts:
+    - ns1
+  roles:
+    - dpvhab/dns/dmz/ns1
+    - dpvhab/iptables/dmz/ns1
+
+- name: INSTALL PROXY DMZ
+  tags: dpvhab-proxy-dmz-px1
+  hosts:
+    - px1
+  roles:
+    - debian/proxy
+    - dpvhab/proxy/dmz/px1
+    - dpvhab/iptables/dmz/px1
+
+- name: INSTALL SMTP DMZ (Relay)
+  tags: dpvhab-smtp-dmz-mx1
+  hosts:
+    - mx1
+  roles:
+    - dpvhab/smtp/dmz/mx1
+    - dpvhab/iptables/dmz/mx1
+
+- name: INSTALL Git
+  tags: dpvhab-git-dmz-adm
+  hosts:
+    - adm
+  roles:
+    - dpvhab/git/dmz/adm

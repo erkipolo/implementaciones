@@ -2,42 +2,46 @@ all:
   children:
     dpvhab:
       hosts:
-        fw1:
-          ansible_host: 192.168.40.3
-        fw2:
+        router-www:
+          ansible_host: 190.6.78.49
+        router-nac:
+          ansible_host: 190.6.67.1
+        router-vpn:
+          ansible_host: 172.32.16.1
+        firewall-www:
           ansible_host: 192.168.40.1
-        fw3:
+        firewall-nac:
           ansible_host: 192.168.40.2
-        ns1:
+        firewall-vpn:
+          ansible_host: 192.168.40.3
+        firewall-lan:
+          ansible_host: 192.168.40.4
+        ns:
           ansible_host: 192.168.40.10
-        mx1:
+        px:
           ansible_host: 192.168.40.12
-        px1:
-          ansible_host: 192.168.40.30
+        mx:
+          ansible_host: 192.168.40.14
         repo:
           ansible_host: 192.168.40.16
         adm:
           ansible_host: 192.168.40.18
-        r1:
-          ansible_host: 172.32.16.1
-        r2:
-          ansible_host: 190.6.78.49
-        r3:
-          ansible_host: 190.6.67.1
-    dmz:
-      hosts:
-        ns1:
-        mx1:
-        px1:
-        repo:
-        adm:
-    firewalls:
-      hosts:
-        fw1:
-        fw2:
-        fw3:
     routers:
       hosts:
-        r1:
-        r2:
-        r3:
+        router-www:
+        router-nac:
+        router-vpn:
+    firewalls:
+      hosts:
+        firewall-www:
+        firewall-nac:
+        firewall-vpn:
+        firewall-lan:
+    dmz:
+      hosts:
+        ns:
+        px:
+        mx:
+        repo:
+        adm:
+

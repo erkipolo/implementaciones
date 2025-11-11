@@ -5,7 +5,6 @@
     state: present
   with_items:
     - 'up ip -4 route add 190.6.78.48/29 via 192.168.40.1'
-    - 'up ip -4 route add 172.32.0.0/16 via 192.168.40.3'
     - 'up ip -4 route add 152.206.0.0/15 via 192.168.40.2'
     - 'up ip -4 route add 169.158.0.0/16 via 192.168.40.2'
     - 'up ip -4 route add 181.225.224.0/19 via 192.168.40.2'
@@ -27,4 +26,6 @@
     - 'up ip -4 route add 200.55.176.0/20 via 192.168.40.2'
     - 'up ip -4 route add 201.220.192.0/20 via 192.168.40.2'
     - 'up ip -4 route add 201.220.208.0/20 via 192.168.40.2'
+    - 'up ip -4 route add 172.32.0.0/16 via 192.168.40.3'
+    - 'up ip -4 route add 10.16.0.0/17 via 192.168.40.4'
   notify: restart_systemd_networkd
