@@ -14,6 +14,10 @@ all:
           ansible_host: 192.168.40.12
         px1:
           ansible_host: 192.168.40.30
+        repo:
+          ansible_host: 192.168.40.16
+        adm:
+          ansible_host: 192.168.40.18
         r1:
           ansible_host: 172.32.16.1
         r2:
@@ -25,6 +29,8 @@ all:
         ns1:
         mx1:
         px1:
+        repo:
+        adm:
     firewalls:
       hosts:
         fw1:

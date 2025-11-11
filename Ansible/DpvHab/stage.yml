@@ -53,6 +53,7 @@
   hosts:
     - ns1
     - px1
+    - repo
     - firewalls
   roles:
     - debian/ct/smtp/remove
@@ -190,3 +191,10 @@
   roles:
     - dpvhab/smtp/dmz/mx1
     - dpvhab/iptables/dmz/mx1
+
+- name: INSTALL Git
+  tags: dpvhab-git-dmz-adm
+  hosts:
+    - adm
+  roles:
+    - dpvhab/git/dmz/adm

@@ -360,3 +360,63 @@ resource "proxmox_lxc" "px1" {
     storage = "local-lvm"
   }
 }
+
+resource "proxmox_lxc" "repo" {
+  cores           = 1
+  hostname        = "repo"
+  memory          = 1024
+  nameserver      = "192.168.40.10"
+  onboot          = true
+  ostemplate      = "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
+  ssh_public_keys = var.ct_ssh_public_key
+  searchdomain    = "dpvhab.cu"
+  start           = true
+  swap            = 1024
+  target_node     = "node01"
+  unprivileged    = true
+  vmid            = 316
+  features {
+    nesting = true
+  }
+  network {
+    bridge   = "vmbr0"
+    firewall = true
+    ip       = "192.168.40.16/24"
+    gw       = "192.168.40.1"
+    name     = "eth0"
+  }
+  rootfs {
+    size    = "180G"
+    storage = "local-lvm"
+  }
+}
+
+resource "proxmox_lxc" "adm" {
+  cores           = 1
+  hostname        = "adm"
+  memory          = 1024
+  nameserver      = "192.168.40.10"
+  onboot          = true
+  ostemplate      = "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
+  ssh_public_keys = var.ct_ssh_public_key
+  searchdomain    = "dpvhab.cu"
+  start           = true
+  swap            = 1024
+  target_node     = "node01"
+  unprivileged    = true
+  vmid            = 318
+  features {
+    nesting = true
+  }
+  network {
+    bridge   = "vmbr0"
+    firewall = true
+    ip       = "192.168.40.18/24"
+    gw       = "192.168.40.1"
+    name     = "eth0"
+  }
+  rootfs {
+    size    = "5G"
+    storage = "local-lvm"
+  }
+}

@@ -1,0 +1,5 @@
+- name: Instalamos git
+  ansible.builtin.apt:
+    name:
+      - git
+    state: present
