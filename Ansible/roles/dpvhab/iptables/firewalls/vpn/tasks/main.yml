@@ -129,7 +129,7 @@
     protocol: tcp
     destination_port: 80
     source: 172.32.16.1/32
-    destination: 192.168.40.20/32
+    destination: 192.168.40.29/32
     ctstate: NEW
     syn: match
     jump: ACCEPT

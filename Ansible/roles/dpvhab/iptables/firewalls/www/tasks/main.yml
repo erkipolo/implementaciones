@@ -92,7 +92,7 @@
     destination_port: 80
     source: 190.6.78.49/32
     destination: 190.6.78.52/32
-    to_destination: 192.168.40.20
+    to_destination: 192.168.40.29
     ctstate: NEW
     syn: match
     jump: DNAT
@@ -112,7 +112,7 @@
     protocol: tcp
     destination_port: 80
     source: 190.6.78.49/32
-    destination: 192.168.40.20/32
+    destination: 192.168.40.29/32
     ctstate: NEW
     syn: match
     jump: ACCEPT
@@ -150,7 +150,7 @@
     action: append
     protocol: tcp
     destination_ports: '21,70,80,210,280,443,488,591,777,1025:65535'
-    source: 192.168.40.30/32
+    source: 192.168.40.12/32
     destination: 0.0.0.0/0
     ctstate: NEW
     jump: ACCEPT
@@ -248,7 +248,7 @@
     action: append
     protocol: tcp
     destination_ports: '21,70,80,210,280,443,488,591,777,1025:65535'
-    source: 192.168.40.30/32
+    source: 192.168.40.12/32
     destination: 0.0.0.0/0
     to_source: 190.6.78.53
     ctstate: NEW

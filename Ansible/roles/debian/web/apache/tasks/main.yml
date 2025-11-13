@@ -1,0 +1,201 @@
+- name: Install Apache
+  ansible.builtin.apt:
+    name:
+      - apache2
+      - libapache2-mod-security2
+      - libapache2-mod-evasive
+    state: latest
+
+- name: enable mod_rewrite
+  apache2_module:
+    name: rewrite
+    state: present
+  notify: restart_apache
+
+- name: enable mod_headers
+  apache2_module:
+    name: headers
+    state: present
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/conf-enabled/security.conf
+    regexp: "^ServerTokens "
+    line: 'ServerTokens Prod'
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/conf-enabled/security.conf
+    regexp: "^ServerSignature "
+    line: 'ServerSignature Off'
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/conf-enabled/security.conf
+    regexp: "^TraceEnable "
+    line: 'TraceEnable Off'
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/conf-enabled/security.conf
+    regexp: "^#Header set X-Content-Type-Options"
+    line: 'Header set X-Content-Type-Options: "nosniff"'
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/conf-enabled/security.conf
+    regexp: "^Header set X-Frame-Options"
+    line: 'Header set X-Frame-Options: "sameorigin"'
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/conf-enabled/security.conf
+    regexp: "^FileETag"
+    line: 'FileETag None'
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/conf-enabled/security.conf
+    regexp: "^Header edit Set-Cookie"
+    line: 'Header edit Set-Cookie ^(.*)$ $1;HttpOnly;Secure'
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/conf-enabled/security.conf
+    regexp: "^#Header set X-XSS-Protection"
+    line: 'Header set X-XSS-Protection "1; mode=block"'
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/conf-enabled/security.conf
+    regexp: "^RewriteEngine"
+    line: 'RewriteEngine On'
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/conf-enabled/security.conf
+    regexp: "^RewriteCond"
+    line: 'RewriteCond %(THE_REQUEST) !HTTP/1.1$'
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/conf-enabled/security.conf
+    regexp: "^RewriteRule "
+    line: 'RewriteRule .* -[F]'
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/apache2.conf
+    regexp: "^Timeout "
+    line: 'Timeout 60'
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/apache2.conf
+    regexp: "Options FollowSymLinks"
+    line: '        Options -Indexes -FollowSymLinks'
+  notify: restart_apache
+
+- name: copiamos configuración de seguridad
+  ansible.builtin.copy:
+    src: /etc/modsecurity/modsecurity.conf-recommended
+    dest: /etc/modsecurity/modsecurity.conf
+    remote_src: true
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/modsecurity/modsecurity.conf
+    regexp: "^SecRuleEngine "
+    line: 'SecRuleEngine DetectionOnly'
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/mods-available/security2.conf
+    line: 'IncludeOptional /usr/share/modsecurity-crs/*.conf'
+    insertbefore: '</IfModule>'
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/mods-available/evasive.conf
+    regexp: "^    #DOSHashTableSize "
+    line: '    DOSHashTableSize     3079'
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/mods-available/evasive.conf
+    regexp: "^    #DOSPageCount "
+    line: '    DOSPageCount         20'
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/mods-available/evasive.conf
+    regexp: "^    #DOSSiteCount "
+    line: '    DOSSiteCount         200'
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/mods-available/evasive.conf
+    regexp: "^    #DOSPageInterval "
+    line: '    DOSPageInterval      1'
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/mods-available/evasive.conf
+    regexp: "^    #DOSSiteInterval "
+    line: '    DOSSiteInterval      5'
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/mods-available/evasive.conf
+    regexp: "^    #DOSBlockingPeriod "
+    line: '    DOSBlockingPeriod    3600'
+  notify: restart_apache
+
+- name: Configurar la seguridad de apache
+  ansible.builtin.lineinfile:
+    dest: /etc/apache2/mods-available/evasive.conf
+    regexp: "^    #DOSLogDir "
+    line: '    DOSLogDir            "/var/log/mod_evasive"'
+  notify: restart_apache
+
+- name: Create directory for mod-evasive log
+  ansible.builtin.file:
+    path: /var/log/mod_evasive
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+- name: Proxy Log Rotate Config
+  ansible.builtin.copy:
+    src: "apache2"
+    dest: /etc/logrotate.d/apache2
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart_apache
+

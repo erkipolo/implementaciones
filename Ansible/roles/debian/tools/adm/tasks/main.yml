@@ -1,0 +1,9 @@
+- name: Instalamos Herramientas de Administracion
+  ansible.builtin.apt:
+    name:
+      - ansible
+      - sshpass
+      - git
+      - tmux
+      - vim-nox
+    state: present
