@@ -1,0 +1,68 @@
+- name: Instalamos los certificados de ejemplo
+  ansible.builtin.apt:
+    name:
+      - ssl-cert
+    state: present
+
+- name: Instalamos postfix
+  ansible.builtin.apt:
+    name:
+      - postfix
+    state: present
+
+- name: Configurar el apartado "From" del correo electronico
+  ansible.builtin.lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^myorigin ="
+    line: 'myorigin = $mydomain'
+  notify: restart_postfix
+
+- name: Configurar las interfaces de escucha
+  ansible.builtin.lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^inet_interfaces ="
+    line: 'inet_interfaces = all'
+  notify: restart_postfix
+
+- name: Configurar los protocolos de escucha
+  ansible.builtin.lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^inet_protocols ="
+    line: 'inet_protocols = all'
+  notify: restart_postfix
+
+- name: Habilitar el uso de TLS como cliente en postfix
+  ansible.builtin.lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^smtp_tls_security_level ="
+    line: 'smtp_tls_security_level = encrypt'
+  notify: restart_postfix
+
+- name: Configurar el certificado TLS ha emplear como cliente en postfix
+  ansible.builtin.lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^smtp_tls_CAfile ="
+    line: 'smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt'
+  notify: restart_postfix
+
+- name: Habilitar las bitacoras de postfix
+  ansible.builtin.lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^maillog_file ="
+    line: 'maillog_file = /var/log/mail.log'
+  notify: restart_postfix
+
+- name: Configuramos la rotacion de las bitacoras de postfix
+  ansible.builtin.template:
+    src: postfix.j2
+    dest: /etc/logrotate.d/postfix
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart_postfix
+
+- name: Instalar las herramientas de consola para el manejo de correos
+  ansible.builtin.apt:
+    name:
+      - mailutils
+    state: present

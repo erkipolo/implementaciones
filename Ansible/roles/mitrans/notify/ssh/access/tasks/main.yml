@@ -1,0 +1,13 @@
+- name: Configurar el libreria de PAM
+  ansible.builtin.lineinfile:
+    path: /etc/pam.d/sshd
+    line: 'session optional pam_exec.so /usr/local/bin/notify-on-ssh-login.sh'
+    insertafter: "@include common-password"
+
+- name: Copiar el guión para el envio de alertas de acceso SSH via correo
+  ansible.builtin.copy:
+    src: "notify-on-ssh-login.sh"
+    dest: /usr/local/bin/notify-on-ssh-login.sh
+    owner: root
+    group: root
+    mode: '0755'

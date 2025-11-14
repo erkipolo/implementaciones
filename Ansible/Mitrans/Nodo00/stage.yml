@@ -1,0 +1,66 @@
+---
+- name: Actualizar los indices del repositorio y el sistema operativo
+  tags: upgrade
+  hosts: all
+  roles:
+    - debian/upgrade
+
+- name: Configuraciones de Control Basicas del Sistema
+  tags: sysctl-config
+  hosts: all
+  roles:
+    - debian/sysctl/basic
+
+- name: Crear un nuevo usuario con privilegios de sudo y acceso SSH por llave
+  tags: create-sudo-user
+  hosts: all
+  vars:
+    NORMAL_USER_NAME: 'erki'
+    NORMAL_USER_PASS: '$6$8X9Kphrm0NKgQ3AY$WaHpzbQxtoAssveV2xACLsYy9Wnkyby/HPHd26/oHelMa54ZGWMwxsBQqTd.nLXLv9BaWYsnqJTn6QiOdvHy40'
+    NORMAL_USER_PUB_KEY: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCm97/EI/9tcNeVs3acOJTHpQ168QmQnOSJwR2E5ObhszS/aPEcbWEtHP8J5Hs3eTEZhiYBWMlb8+DWv3s4jR0KVb/Hxqvn0gf4oG4o+MYL+Tn3Cmc1FEk86qjJ3DDvu4JD2JdV9RuvPNGVQmRXDtRP6ALq/cAeD3BANm7Liv3/98u2aLK/5CTsW43kEKb/s3JfiumOIhXXCX8el2mdlaWlMOPRKKHU867gHBBKPx5WDzA/NQN765t6/RnoxrdCwn2TrkxMYE9lO7mnpnNW5w1pQnv4e6ljOBBDilss66PhSb29WCIQyD7aOx4aoBJ6qzFp3O99y2d3NvdTqpwR45JK8bEGeJwYoETK54U0IxtBRzniEFgFCX8HGolfsdzrpR2KIf/+vFx0e0bGb5LIeUsIWRWRiLvTquMTIfwmpyFHEFBALyWd+AqUtJ4oXRq/k0VmdB3TRn4ZkzwXZxPfSxOSt5AqQizIYrRrLpveLe40yZcYo1AOjs6j87A4FPzAVN8= erki'
+  roles:
+    - debian/sudo/user
+
+- name: Crear un nuevo usuario con privilegios de sudo y acceso SSH por llave
+  tags: create-sudo-user
+  hosts: all
+  vars:
+    NORMAL_USER_NAME: 'raydel'
+    NORMAL_USER_PASS: '$6$Xh9aZ./2nPe1.KyJ$fhld.zXC4qYNjuz7UWx4U/IBGyQQWXjRC8AX3pxsxf2nk127jpD7HHt6ymOzbvDaqu.nkU2mevgFejnoeItQU1'
+    NORMAL_USER_PUB_KEY: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC//tzWJA33OmGUxTfxluL4hC9FFtO2OBvxXMaTTfbxede09C8fEGp+ex0GsX/d79AcKRTNLt77lywzrgiNf5cem03eH3Vku1CeW6Q57npDNCWfW9HCo4fv84rpgulctjDe5AjIBzD8T5aDADR65dmGCGznLmWOxsDG5radRE5oDRX3QqLrLAY0NsRrDGLBiIUGe51Uvhui0JBnphdJ2CL4Z0OHMJ6N7iQnB4Buo/6846i1jWeOb/MeTjilf3P3nDM5DKAWmJzY56ozOZ6CNqz2nhFuJ5dvzx3J/1w6uLLHKlnio8HDvxiV6/A3z6gGApHDtGz44kB/okFArB9QxL2L raydel@2-059'
+  roles:
+    - debian/sudo/user
+
+- name: Habilitar Notificaciones via e-mail (postfix)
+  tags: sendonly-postfix
+  hosts: all
+  roles:
+    - debian/notify/postfix
+
+- name: Habilitar Notificaciones de Acceso al servicio SSH (Requiere Habilitar Notificaciones via e-mail usando postfix)
+  tags: notify-ssh-access
+  hosts: all
+  roles:
+    - mitrans/notify/ssh/access
+
+- name: Habilitar HIPS con notificaciones via e-mail usando fail2ban (Requiere Habilitar Notificaciones via e-mail usando postfix)
+  tags: fail2ban
+  hosts: all
+  roles:
+    - mitrans/hips/fail2ban
+
+- name: Habilitar las actualizaciones automaticas con notificaciones via e-mail (Requiere Habilitar Notificaciones via e-mail usando postfix)
+  tags:  unattended-upgrades
+  hosts: all
+  roles:
+    - mitrans/upgrade/unattended
+
+- name: FIREWALL INSTALL AND CONFIG DMZ
+  tags: firewall-dmz
+  hosts:
+    - all
+  roles:
+    - debian/iptables/init
+    - mitrans/iptables/ssh/hosts/dmz
+    - mitrans/iptables/ssh/hosts/lan
+    - debian/iptables/policy/hosts

@@ -1,0 +1,6 @@
+- name: restart_unattended
+  ansible.builtin.systemd_service:
+    name: unattended-upgrades
+    masked: no
+    enabled: true
+    state: restarted

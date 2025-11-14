@@ -1,0 +1,32 @@
+- name: Instalamos las actualizaciones automaticas
+  ansible.builtin.apt:
+    name:
+      - unattended-upgrades
+    state: present
+
+- name: Copiamos una configuracion personalizada 1
+  ansible.builtin.copy:
+    src: "52unattended-upgrades-local"
+    dest: /etc/apt/apt.conf.d/52unattended-upgrades-local
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart_unattended
+
+- name: Copiamos una configuracion personalizada 2
+  ansible.builtin.copy:
+    src: "20auto-upgrades"
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart_unattended
+
+- name: Configuramos la rotacion de las bitacoras de las actualizaciones automáticas
+  ansible.builtin.template:
+    src: unattended-upgrades.j2
+    dest: /etc/logrotate.d/unattended-upgrades
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart_unattended
